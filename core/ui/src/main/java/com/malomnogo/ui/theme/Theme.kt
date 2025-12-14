@@ -1,6 +1,5 @@
-package com.malomnogo.pokedex.ui.theme
+package com.malomnogo.ui.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme

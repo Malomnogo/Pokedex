@@ -14,8 +14,12 @@ class PokemonListViewModel(
     private val repository: PokemonRepository,
     private val mapper: PokemonListResult.Mapper<PokemonListUiState>,
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow<PokemonListUiState>(PokemonListUiState.FirstRun)
+    private val _uiState = MutableStateFlow<PokemonListUiState>(PokemonListUiState.Progress)
     val uiState = _uiState.asStateFlow()
+
+    init {
+        loadData()
+    }
 
     fun onIntent(intent: PokemonListIntent) {
         when (intent) {

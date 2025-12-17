@@ -1,4 +1,4 @@
-package com.malomnogo.pokedex.ui.theme
+package com.malomnogo.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

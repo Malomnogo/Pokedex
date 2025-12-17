@@ -11,6 +11,7 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
@@ -21,3 +22,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "Pokedex"
 include(":app")
+include(":core:network")
+include(":core:data")
+include(":core:ui")
+include(":core:model")

@@ -26,10 +26,7 @@ android {
 dependencies {
     implementation(project(":feature:list:domain"))
     implementation(project(":core:ui"))
-
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
+    implementation(project(":core:common"))
 
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.junit)

@@ -30,6 +30,7 @@ tasks.getByPath("preBuild").dependsOn("ktlintFormat")
 
 dependencies {
     implementation(project(":core:ui"))
+    implementation(project(":core:common"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

@@ -12,6 +12,7 @@ dependencies {
     implementation(libs.kotlin.gradlePlugin)
     implementation(libs.compose.compiler.gradlePlugin)
     implementation(libs.ktlint.gradlePlugin)
+    implementation(libs.kotlin.serialization.gradlePlugin)
 }
 
 tasks.withType<KotlinCompile>().configureEach {
@@ -45,6 +46,10 @@ gradlePlugin {
         register("jvmLibrary") {
             id = "pokedex.jvm.library"
             implementationClass = "JvmLibraryConventionPlugin"
+        }
+        register("kotlinSerialization") {
+            id = "pokedex.kotlin.serialization"
+            implementationClass = "KotlinSerializationConventionPlugin"
         }
     }
 }

@@ -1,51 +1,11 @@
-import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
-
 plugins {
-    alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose)
-    id("org.jlleitschuh.gradle.ktlint") version "14.0.1"
-}
-
-kotlin {
-    jvmToolchain(17)
+    id("pokedex.android.library")
+    id("pokedex.android.library.compose")
+    id("pokedex.ktlint")
 }
 
 android {
     namespace = "com.malomnogo.ui"
-    compileSdk {
-        version = release(36)
-    }
-
-    defaultConfig {
-        minSdk = 26
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro",
-            )
-        }
-    }
-    buildFeatures {
-        compose = true
-    }
-}
-
-ktlint {
-    android = true
-    ignoreFailures = false
-    reporters {
-        reporter(ReporterType.PLAIN)
-        reporter(ReporterType.CHECKSTYLE)
-        reporter(ReporterType.SARIF)
-    }
 }
 
 dependencies {

@@ -1,7 +1,9 @@
 package com.malomnogo.model.core
 
 import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class BasePagingResponse<T>(
     @SerialName("count")
     val count: Int,

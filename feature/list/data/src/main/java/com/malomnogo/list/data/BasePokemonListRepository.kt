@@ -2,20 +2,18 @@ package com.malomnogo.list.data
 
 import com.malomnogo.common.AppDispatchers
 import com.malomnogo.common.HandleError
-import com.malomnogo.common.Mapper
 import com.malomnogo.data.PokemonCloudDataSource
-import com.malomnogo.domain.PokemonDomain
 import com.malomnogo.domain.PokemonListRepository
 import com.malomnogo.domain.PokemonListResult
-import com.malomnogo.model.PokemonCloud
 import kotlinx.coroutines.withContext
 
 class BasePokemonListRepository(
     private val cloudDataSource: PokemonCloudDataSource,
     private val handleError: HandleError,
-    private val mapper: Mapper<PokemonCloud, PokemonDomain>,
+    private val mapper: BasePokemonCloudMapper, // Конкретный класс вместо дженерика
     private val dispatchers: AppDispatchers
 ) : PokemonListRepository {
+
     override suspend fun fetchPokemonList(): PokemonListResult = withContext(dispatchers.io) {
         try {
             val pokemonList = cloudDataSource.fetchPokemonList(0)

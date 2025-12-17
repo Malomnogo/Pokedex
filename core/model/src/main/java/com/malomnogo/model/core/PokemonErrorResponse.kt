@@ -1,4 +1,4 @@
-package com.malomnogo.network.model
+package com.malomnogo.model.core
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

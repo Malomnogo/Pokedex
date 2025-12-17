@@ -14,8 +14,7 @@ class PokemonListViewModel(
     private val repository: PokemonRepository,
     private val mapper: PokemonListResult.Mapper<PokemonListUiState>,
 ) : ViewModel() {
-
-    private val _uiState = MutableStateFlow<PokemonListUiState>(PokemonListUiState.Empty)
+    private val _uiState = MutableStateFlow<PokemonListUiState>(PokemonListUiState.FirstRun)
     val uiState = _uiState.asStateFlow()
 
     fun loadData() {

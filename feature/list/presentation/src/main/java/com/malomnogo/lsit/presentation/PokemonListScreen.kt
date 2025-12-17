@@ -73,7 +73,7 @@ private fun PokemonListContent(
 
 @Preview(showBackground = true, name = "Loading State")
 @Composable
-private fun PreviewPokemonList_Loading() {
+private fun PreviewPokemonListLoading() {
     PokemonListContent(
         modifier = Modifier.fillMaxSize(),
         uiState = PokemonListUiState.Progress,
@@ -83,7 +83,7 @@ private fun PreviewPokemonList_Loading() {
 
 @Preview(showBackground = true, name = "Error State")
 @Composable
-private fun PreviewPokemonList_Error() {
+private fun PreviewPokemonListError() {
     PokemonListContent(
         modifier = Modifier.fillMaxSize(),
         uiState = PokemonListUiState.Error("Something went wrong"),
@@ -93,7 +93,7 @@ private fun PreviewPokemonList_Error() {
 
 @Preview(showBackground = true, name = "Success State")
 @Composable
-private fun PreviewPokemonList_Success() {
+private fun PreviewPokemonListSuccess() {
     PokemonListContent(
         modifier = Modifier.fillMaxSize(),
         uiState =

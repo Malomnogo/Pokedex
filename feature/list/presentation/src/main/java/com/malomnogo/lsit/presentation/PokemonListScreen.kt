@@ -25,7 +25,7 @@ fun PokemonListScreen(
     PokemonListContent(
         modifier = modifier,
         uiState = uiState,
-        onIntent = viewModel::onIntent
+        onIntent = viewModel::onIntent,
     )
 }
 
@@ -33,7 +33,7 @@ fun PokemonListScreen(
 private fun PokemonListContent(
     modifier: Modifier,
     uiState: PokemonListUiState,
-    onIntent: (PokemonListIntent) -> Unit
+    onIntent: (PokemonListIntent) -> Unit,
 ) {
     when (uiState) {
         PokemonListUiState.Progress -> {
@@ -77,7 +77,7 @@ private fun PreviewPokemonList_Loading() {
     PokemonListContent(
         modifier = Modifier.fillMaxSize(),
         uiState = PokemonListUiState.Progress,
-        onIntent = {}
+        onIntent = {},
     )
 }
 
@@ -87,7 +87,7 @@ private fun PreviewPokemonList_Error() {
     PokemonListContent(
         modifier = Modifier.fillMaxSize(),
         uiState = PokemonListUiState.Error("Something went wrong"),
-        onIntent = {}
+        onIntent = {},
     )
 }
 
@@ -96,14 +96,16 @@ private fun PreviewPokemonList_Error() {
 private fun PreviewPokemonList_Success() {
     PokemonListContent(
         modifier = Modifier.fillMaxSize(),
-        uiState = PokemonListUiState.Base(
-            pokemonList = listOf(
-                PokemonUiItem(1, "Bulbasaur", ""),
-                PokemonUiItem(4, "Charmander", ""),
-                PokemonUiItem(7, "Squirtle", ""),
-                PokemonUiItem(25, "Pikachu", "")
-            )
-        ),
-        onIntent = {}
+        uiState =
+            PokemonListUiState.Base(
+                pokemonList =
+                    listOf(
+                        PokemonUiItem(1, "Bulbasaur", ""),
+                        PokemonUiItem(4, "Charmander", ""),
+                        PokemonUiItem(7, "Squirtle", ""),
+                        PokemonUiItem(25, "Pikachu", ""),
+                    ),
+            ),
+        onIntent = {},
     )
 }

@@ -14,7 +14,7 @@ data class PokemonUiItem(
 @Composable
 fun PokemonItem(
     item: PokemonUiItem,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
         Text(text = "${item.name}#${item.id}")

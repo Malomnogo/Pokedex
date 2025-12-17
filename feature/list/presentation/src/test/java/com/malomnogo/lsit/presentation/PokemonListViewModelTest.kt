@@ -4,14 +4,13 @@ import com.malomnogo.GeneratePokemonImageUrl
 import com.malomnogo.domain.PokemonDomain
 import com.malomnogo.domain.PokemonListResult
 import com.malomnogo.domain.PokemonRepository
-import com.malomnogo.lsit.TestProvideDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -19,15 +18,19 @@ internal class PokemonListViewModelTest {
 
     private lateinit var viewModel: PokemonListViewModel
     private lateinit var repository: FakePokemonListRepository
+    private lateinit var generateImageUrl: GeneratePokemonImageUrl
+    private lateinit var pokemonMapper: PokemonItemMapper
+    private lateinit var mapper: PokemonListResult.Mapper<PokemonListUiState>
+
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
 
     @Before
     fun setup() {
         repository = FakePokemonListRepository()
-    }
-
-    @Test
-    fun `success first time`() = runTest {
-        val testDispatcher = StandardTestDispatcher(testScheduler)
+        generateImageUrl = FakeGenerateImageUrl()
+        pokemonMapper = PokemonItemMapper.Base(generateImageUrl)
+        mapper = BasePokemonListDomainToUiMapper(pokemonMapper)
         viewModel = PokemonListViewModel(
             repository = repository,
             mapper = BasePokemonListDomainToUiMapper(
@@ -35,8 +38,11 @@ internal class PokemonListViewModelTest {
                     generateImage = FakeGenerateImageUrl()
                 )
             ),
-            provideDispatchers = TestProvideDispatcher(testDispatcher)
         )
+    }
+
+    @Test
+    fun `success first time`() = runTest {
         repository.returnSuccess()
         val actual: StateFlow<PokemonListUiState> = viewModel.uiState
         val expected = PokemonListUiState.Base(
@@ -67,16 +73,6 @@ internal class PokemonListViewModelTest {
 
     @Test
     fun `error twice`() = runTest {
-        val testDispatcher = StandardTestDispatcher(testScheduler)
-        viewModel = PokemonListViewModel(
-            repository = repository,
-            mapper = BasePokemonListDomainToUiMapper(
-                pokemonMapper = PokemonItemMapper.Base(
-                    generateImage = FakeGenerateImageUrl()
-                )
-            ),
-            provideDispatchers = TestProvideDispatcher(testDispatcher)
-        )
         repository.returnError()
         val actual: StateFlow<PokemonListUiState> = viewModel.uiState
         val expected = PokemonListUiState.Error(message = "No internet connection")
@@ -105,16 +101,6 @@ internal class PokemonListViewModelTest {
 
     @Test
     fun `success after error`() = runTest {
-        val testDispatcher = StandardTestDispatcher(testScheduler)
-        viewModel = PokemonListViewModel(
-            repository = repository,
-            mapper = BasePokemonListDomainToUiMapper(
-                pokemonMapper = PokemonItemMapper.Base(
-                    generateImage = FakeGenerateImageUrl()
-                )
-            ),
-            provideDispatchers = TestProvideDispatcher(testDispatcher)
-        )
         repository.returnError()
         val actual: StateFlow<PokemonListUiState> = viewModel.uiState
         var expected: PokemonListUiState = PokemonListUiState.Error(message = "No internet connection")
@@ -192,9 +178,4 @@ private class FakePokemonListRepository : PokemonRepository {
     override suspend fun fetchPokemonList(): PokemonListResult {
         return result
     }
-}
-
-private class FakeGenerateImageUrl : GeneratePokemonImageUrl {
-
-    override fun generateUrl(id: Int) = "https://$id.jpg"
 }

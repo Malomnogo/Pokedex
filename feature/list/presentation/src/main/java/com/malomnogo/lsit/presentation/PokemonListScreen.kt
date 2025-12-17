@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 @Composable
@@ -40,11 +41,13 @@ private fun PokemonListContent(
                 modifier = modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center,
             ) {
-                CircularProgressIndicator(modifier)
+                CircularProgressIndicator()
             }
         }
+
         is PokemonListUiState.Base -> {
             LazyVerticalGrid(
+                modifier = modifier.fillMaxSize(),
                 columns = GridCells.Fixed(2),
             ) {
                 items(uiState.pokemonList) { pokemonUi ->
@@ -52,6 +55,7 @@ private fun PokemonListContent(
                 }
             }
         }
+
         is PokemonListUiState.Error -> {
             Box(
                 modifier = modifier.fillMaxSize(),
@@ -65,4 +69,41 @@ private fun PokemonListContent(
             }
         }
     }
+}
+
+@Preview(showBackground = true, name = "Loading State")
+@Composable
+private fun PreviewPokemonList_Loading() {
+    PokemonListContent(
+        modifier = Modifier.fillMaxSize(),
+        uiState = PokemonListUiState.Progress,
+        onIntent = {}
+    )
+}
+
+@Preview(showBackground = true, name = "Error State")
+@Composable
+private fun PreviewPokemonList_Error() {
+    PokemonListContent(
+        modifier = Modifier.fillMaxSize(),
+        uiState = PokemonListUiState.Error("Something went wrong"),
+        onIntent = {}
+    )
+}
+
+@Preview(showBackground = true, name = "Success State")
+@Composable
+private fun PreviewPokemonList_Success() {
+    PokemonListContent(
+        modifier = Modifier.fillMaxSize(),
+        uiState = PokemonListUiState.Base(
+            pokemonList = listOf(
+                PokemonUiItem(1, "Bulbasaur", ""),
+                PokemonUiItem(4, "Charmander", ""),
+                PokemonUiItem(7, "Squirtle", ""),
+                PokemonUiItem(25, "Pikachu", "")
+            )
+        ),
+        onIntent = {}
+    )
 }

@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Pokedex</string>
+    <string name="no_internet_connection">No internet connection</string>
+    <string name="service_unavailable">Service unavailable</string>
+    <string name="error_parsing_server_response">Error parsing server response</string>
+    <string name="server_error_code">Server error code %d</string>
 </resources>

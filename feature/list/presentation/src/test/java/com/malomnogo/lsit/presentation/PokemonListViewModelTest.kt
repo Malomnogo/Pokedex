@@ -18,8 +18,8 @@ internal class PokemonListViewModelTest {
     private lateinit var viewModel: PokemonListViewModel
     private lateinit var repository: FakePokemonListRepository
     private lateinit var generateImageUrl: GeneratePokemonImageUrl
-    private lateinit var pokemonMapper: PokemonItemMapper
-    private lateinit var mapper: PokemonListResult.Mapper<PokemonListUiState>
+    private lateinit var itemMapper: PokemonItemMapper
+    private lateinit var stateMapper: PokemonListStateMapper
 
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
@@ -28,21 +28,16 @@ internal class PokemonListViewModelTest {
     fun setup() {
         repository = FakePokemonListRepository()
         generateImageUrl = FakeGenerateImageUrl()
-        pokemonMapper = PokemonItemMapper.Base(generateImageUrl)
-        mapper = BasePokemonListDomainToUiMapper(pokemonMapper)
+        itemMapper = PokemonItemMapper.Base(generateImageUrl)
+        stateMapper = PokemonListStateMapper.Base(itemMapper)
+        // ViewModel creation is moved to tests to control init block execution
     }
 
     private fun createViewModel() {
         viewModel =
             PokemonListViewModel(
                 repository = repository,
-                mapper =
-                    BasePokemonListDomainToUiMapper(
-                        pokemonMapper =
-                            PokemonItemMapper.Base(
-                                generateImage = FakeGenerateImageUrl(),
-                            ),
-                    ),
+                mapper = stateMapper
             )
     }
 
@@ -75,6 +70,7 @@ internal class PokemonListViewModelTest {
                         ),
                 )
 
+            // Initial state is Progress because of init block
             assertEquals(PokemonListUiState.Progress, actual.value)
             
             advanceUntilIdle()
@@ -90,10 +86,12 @@ internal class PokemonListViewModelTest {
             val actual: StateFlow<PokemonListUiState> = viewModel.uiState
             val expected = PokemonListUiState.Error(message = "No internet connection")
             
+            // Check first load (from init)
             assertEquals(PokemonListUiState.Progress, actual.value)
             advanceUntilIdle()
             assertEquals(expected, actual.value)
 
+            // Retry
             viewModel.onIntent(PokemonListIntent.Retry)
             assertEquals(PokemonListUiState.Progress, actual.value)
             advanceUntilIdle()
@@ -109,10 +107,12 @@ internal class PokemonListViewModelTest {
             val actual: StateFlow<PokemonListUiState> = viewModel.uiState
             var expected: PokemonListUiState = PokemonListUiState.Error(message = "No internet connection")
             
+            // Check first load (error)
             assertEquals(PokemonListUiState.Progress, actual.value)
             advanceUntilIdle()
             assertEquals(expected, actual.value)
 
+            // Prepare success
             repository.returnSuccess()
             expected =
                 PokemonListUiState.Base(
@@ -136,6 +136,7 @@ internal class PokemonListViewModelTest {
                         ),
                 )
             
+            // Retry
             viewModel.onIntent(PokemonListIntent.Retry)
             assertEquals(PokemonListUiState.Progress, actual.value)
             advanceUntilIdle()

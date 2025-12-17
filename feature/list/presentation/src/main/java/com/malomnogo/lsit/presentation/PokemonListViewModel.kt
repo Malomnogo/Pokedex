@@ -2,7 +2,6 @@ package com.malomnogo.lsit.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.malomnogo.domain.PokemonListResult
 import com.malomnogo.domain.PokemonRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,7 +11,7 @@ import kotlinx.coroutines.withContext
 
 class PokemonListViewModel(
     private val repository: PokemonRepository,
-    private val mapper: PokemonListResult.Mapper<PokemonListUiState>,
+    private val mapper: PokemonListStateMapper,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<PokemonListUiState>(PokemonListUiState.Progress)
     val uiState = _uiState.asStateFlow()
@@ -33,7 +32,7 @@ class PokemonListViewModel(
         viewModelScope.launch {
             val result = repository.fetchPokemonList()
             withContext(Dispatchers.Main) {
-                _uiState.value = result.map(mapper)
+                _uiState.value = mapper.map(result)
             }
         }
     }

@@ -6,14 +6,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 data class PokemonUiItem(
-    private val id: Int,
-    private val name: String,
-    private val imageUrl: String,
+    val id: Int,
+    val name: String,
+    val imageUrl: String,
+)
+
+@Composable
+fun PokemonItem(
+    item: PokemonUiItem,
+    modifier: Modifier = Modifier
 ) {
-    @Composable
-    fun Show(modifier: Modifier) {
-        Column(modifier = modifier) {
-            Text(text = "$name#$id")
-        }
+    Column(modifier = modifier) {
+        Text(text = "${item.name}#${item.id}")
     }
 }

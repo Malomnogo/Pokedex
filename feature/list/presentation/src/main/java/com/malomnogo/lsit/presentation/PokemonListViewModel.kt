@@ -17,7 +17,14 @@ class PokemonListViewModel(
     private val _uiState = MutableStateFlow<PokemonListUiState>(PokemonListUiState.FirstRun)
     val uiState = _uiState.asStateFlow()
 
-    fun loadData() {
+    fun onIntent(intent: PokemonListIntent) {
+        when (intent) {
+            PokemonListIntent.LoadData -> loadData()
+            PokemonListIntent.Retry -> loadData()
+        }
+    }
+
+    private fun loadData() {
         _uiState.value = PokemonListUiState.Progress
         viewModelScope.launch {
             val result = repository.fetchPokemonList()

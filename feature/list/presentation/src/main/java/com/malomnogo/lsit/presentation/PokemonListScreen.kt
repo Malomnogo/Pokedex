@@ -12,5 +12,5 @@ fun PokemonListScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    uiState.Show(modifier = modifier, viewModel = viewModel)
+    uiState.Show(modifier = modifier, onIntent = viewModel::onIntent)
 }

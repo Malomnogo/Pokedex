@@ -17,17 +17,17 @@ interface PokemonListUiState {
     @Composable
     fun Show(
         modifier: Modifier,
-        viewModel: PokemonListViewModel,
+        onIntent: (PokemonListIntent) -> Unit,
     )
 
     object FirstRun : PokemonListUiState {
         @Composable
         override fun Show(
             modifier: Modifier,
-            viewModel: PokemonListViewModel,
+            onIntent: (PokemonListIntent) -> Unit,
         ) {
             LaunchedEffect(Unit) {
-                viewModel.loadData()
+                onIntent(PokemonListIntent.LoadData)
             }
         }
     }
@@ -38,13 +38,13 @@ interface PokemonListUiState {
         @Composable
         override fun Show(
             modifier: Modifier,
-            viewModel: PokemonListViewModel,
+            onIntent: (PokemonListIntent) -> Unit,
         ) {
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
             ) {
                 items(pokemonList) { pokemonUi ->
-                    pokemonUi.Show(modifier = Modifier)
+                    PokemonItem(item = pokemonUi, modifier = Modifier)
                 }
             }
         }
@@ -54,7 +54,7 @@ interface PokemonListUiState {
         @Composable
         override fun Show(
             modifier: Modifier,
-            viewModel: PokemonListViewModel,
+            onIntent: (PokemonListIntent) -> Unit,
         ) {
             Box(
                 modifier = modifier.fillMaxSize(),
@@ -71,14 +71,14 @@ interface PokemonListUiState {
         @Composable
         override fun Show(
             modifier: Modifier,
-            viewModel: PokemonListViewModel,
+            onIntent: (PokemonListIntent) -> Unit,
         ) {
             Box(
                 modifier = modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center,
             ) {
                 Button(onClick = {
-                    viewModel.loadData()
+                    onIntent(PokemonListIntent.Retry)
                 }) {
                     Text(text = "Retry")
                 }

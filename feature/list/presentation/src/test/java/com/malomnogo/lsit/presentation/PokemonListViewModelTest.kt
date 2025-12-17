@@ -1,32 +1,33 @@
 package com.malomnogo.lsit.presentation
 
-import com.malomnogo.lsit.core.FakeRunAsync
+import com.malomnogo.lsit.TestProvideDispatcher
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 
+@OptIn(ExperimentalCoroutinesApi::class)
 internal class PokemonListViewModelTest {
 
     private lateinit var viewModel: PokemonListViewModel
     private lateinit var repository: FakePokemonListRepository
-    private lateinit var runAsync: FakeRunAsync
 
     @Before
     fun setup() {
-        runAsync = FakeRunAsync()
         repository = FakePokemonListRepository()
         viewModel = PokemonListViewModel(
             repository = repository,
-            mapper = BasePokemonListDomainToUiMapper(
-                pokemonMapper = BasePokemonDomainToUiMapper()
-            ),
-            runAsync = runAsync,
+            mapper = BasePokemonListDomainToUiMapper(pokemonMapper = BasePokemonDomainToUiMapper()),
+            provideDispatchers = TestProvideDispatcher(StandardTestDispatcher())
         )
     }
 
     @Test
-    fun `success first time`() {
+    fun `success first time`() = runTest {
         repository.returnSuccess()
         val actual: StateFlow<PokemonListUiState> = viewModel.uiState
         val expected = PokemonListUiState.Base(
@@ -52,57 +53,57 @@ internal class PokemonListViewModelTest {
         viewModel.loadData()
         assertEquals(
             expected = PokemonListUiState.Progress,
-            actual = actual
+            actual = actual.value
         )
-        runAsync.returnResult()
+        advanceUntilIdle()
         assertEquals(
             expected = PokemonListUiState.Base(pokemonList = expected),
-            actual = actual
+            actual = actual.value
         )
     }
 
     @Test
-    fun `error twice`() {
+    fun `error twice`() = runTest {
         repository.returnError()
         val actual: StateFlow<PokemonListUiState> = viewModel.uiState
         val expected = PokemonListUiState.Error(message = "No internet connection")
         viewModel.loadData()
         assertEquals(
             expected = PokemonListUiState.Progress,
-            actual = actual
+            actual = actual.value
         )
-        runAsync.retrunResult()
+        advanceUntilIdle()
         assertEquals(
             expected = expected,
-            actual = actual
+            actual = actual.value
         )
 
         viewModel.loadData()
         assertEquals(
             expected = PokemonListUiState.Progress,
-            actual = actual
+            actual = actual.value
         )
-        runAsync.retrunResult()
+        advanceUntilIdle()
         assertEquals(
             expected = expected,
-            actual = actual
+            actual = actual.value
         )
     }
 
     @Test
-    fun `success after error`() {
+    fun `success after error`() = runTest {
         repository.returnError()
         val actual: StateFlow<PokemonListUiState> = viewModel.uiState
         var expected = PokemonListUiState.Error(message = "No internet connection")
         viewModel.loadData()
         assertEquals(
             expected = PokemonListUiState.Progress,
-            actual = actual
+            actual = actual.value
         )
-        runAsync.retrunResult()
+        advanceUntilIdle()
         assertEquals(
             expected = expected,
-            actual = actual
+            actual = actual.value
         )
 
         expected = PokemonListUiState.Base(
@@ -127,12 +128,12 @@ internal class PokemonListViewModelTest {
         viewModel.loadData()
         assertEquals(
             expected = PokemonListUiState.Progress,
-            actual = actual
+            actual = actual.value
         )
-        runAsync.retrunResult()
+        advanceUntilIdle()
         assertEquals(
             expected = expected,
-            actual = actual
+            actual = actual.value
         )
     }
 }

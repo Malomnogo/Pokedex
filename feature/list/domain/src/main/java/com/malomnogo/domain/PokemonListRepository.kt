@@ -1,5 +1,5 @@
 package com.malomnogo.domain
 
-interface PokemonRepository {
+interface PokemonListRepository {
     suspend fun fetchPokemonList(): PokemonListResult
 }

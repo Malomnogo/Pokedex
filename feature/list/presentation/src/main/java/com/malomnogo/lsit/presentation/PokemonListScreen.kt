@@ -1,6 +1,9 @@
 package com.malomnogo.lsit.presentation
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -12,13 +15,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun PokemonListScreen(
+    onPokemonClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: PokemonListViewModel,
+    viewModel: PokemonListViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -26,6 +32,7 @@ fun PokemonListScreen(
         modifier = modifier,
         uiState = uiState,
         onIntent = viewModel::onIntent,
+        onPokemonClick = onPokemonClick
     )
 }
 
@@ -34,6 +41,7 @@ private fun PokemonListContent(
     modifier: Modifier,
     uiState: PokemonListUiState,
     onIntent: (PokemonListIntent) -> Unit,
+    onPokemonClick: (Int) -> Unit,
 ) {
     when (uiState) {
         PokemonListUiState.Progress -> {
@@ -51,16 +59,24 @@ private fun PokemonListContent(
                 columns = GridCells.Fixed(2),
             ) {
                 items(uiState.pokemonList) { pokemonUi ->
-                    PokemonItem(item = pokemonUi, modifier = Modifier)
+                    PokemonItem(
+                        item = pokemonUi,
+                        modifier = Modifier.clickable { onPokemonClick(pokemonUi.id) }
+                    )
                 }
             }
         }
 
         is PokemonListUiState.Error -> {
-            Box(
+            Column(
                 modifier = modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
             ) {
+                Text(
+                    text = uiState.message,
+                    textAlign = TextAlign.Center
+                )
                 Button(onClick = {
                     onIntent(PokemonListIntent.Retry)
                 }) {
@@ -78,6 +94,7 @@ private fun PreviewPokemonListLoading() {
         modifier = Modifier.fillMaxSize(),
         uiState = PokemonListUiState.Progress,
         onIntent = {},
+        onPokemonClick = {}
     )
 }
 
@@ -88,6 +105,7 @@ private fun PreviewPokemonListError() {
         modifier = Modifier.fillMaxSize(),
         uiState = PokemonListUiState.Error("Something went wrong"),
         onIntent = {},
+        onPokemonClick = {}
     )
 }
 
@@ -107,5 +125,6 @@ private fun PreviewPokemonListSuccess() {
                     ),
             ),
         onIntent = {},
+        onPokemonClick = {}
     )
 }

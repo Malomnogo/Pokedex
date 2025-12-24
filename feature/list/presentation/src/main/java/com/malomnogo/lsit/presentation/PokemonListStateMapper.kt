@@ -3,20 +3,20 @@ package com.malomnogo.lsit.presentation
 import com.malomnogo.domain.PokemonListResult
 
 interface PokemonListStateMapper {
-    fun map(result: PokemonListResult): PokemonListUiState
+    fun map(input: PokemonListResult): PokemonListUiState
 
     class Base(
         private val itemMapper: PokemonItemMapper,
     ) : PokemonListStateMapper {
-        override fun map(result: PokemonListResult): PokemonListUiState =
-            when (result) {
+        override fun map(input: PokemonListResult): PokemonListUiState =
+            when (input) {
                 is PokemonListResult.Success -> {
                     PokemonListUiState.Base(
-                        pokemonList = result.pokemonList.map { itemMapper.map(it) },
+                        pokemonList = input.pokemonList.map { itemMapper.map(it) },
                     )
                 }
                 is PokemonListResult.Error -> {
-                    PokemonListUiState.Error(message = result.message)
+                    PokemonListUiState.Error(message = input.message)
                 }
             }
     }

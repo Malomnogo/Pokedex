@@ -1,9 +1,9 @@
 package com.malomnogo.lsit.presentation
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.androidx.compose.koinViewModel
 
@@ -56,12 +57,18 @@ private fun PokemonListContent(
         is PokemonListUiState.Base -> {
             LazyVerticalGrid(
                 modifier = modifier.fillMaxSize(),
-                columns = GridCells.Fixed(2),
+                columns = GridCells.Adaptive(minSize = 105.dp),
+                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 24.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                items(uiState.pokemonList) { pokemonUi ->
+                items(
+                    items = uiState.pokemonList,
+                    key = { it.id }
+                ) { pokemonUi ->
                     PokemonItem(
                         item = pokemonUi,
-                        modifier = Modifier.clickable { onPokemonClick(pokemonUi.id) },
+                        onClick = onPokemonClick
                     )
                 }
             }
@@ -118,10 +125,10 @@ private fun PreviewPokemonListSuccess() {
             PokemonListUiState.Base(
                 pokemonList =
                     listOf(
-                        PokemonUiItem(1, "Bulbasaur", ""),
-                        PokemonUiItem(4, "Charmander", ""),
-                        PokemonUiItem(7, "Squirtle", ""),
-                        PokemonUiItem(25, "Pikachu", ""),
+                        PokemonUiItem(id = 1, number = "#001", name = "Bulbasaur", imageUrl = ""),
+                        PokemonUiItem(4, "#004", "Charmander", ""),
+                        PokemonUiItem(7, "#007", "Squirtle", ""),
+                        PokemonUiItem(25, "#025", "Pikachu", ""),
                     ),
             ),
         onIntent = {},

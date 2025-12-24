@@ -5,6 +5,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.ColorPainter
+import androidx.compose.ui.layout.ContentScale
 import com.malomnogo.ui.WebImage
 
 @Composable
@@ -18,6 +19,7 @@ internal fun PokemonListItemImage(
     WebImage(
         url = pokemon.imageUrl,
         modifier = modifier,
+        contentScale = ContentScale.Fit,
         contentDescription = pokemon.name,
         loadingPlaceholder = loadingPainter,
         errorPlaceholder = errorPainter,

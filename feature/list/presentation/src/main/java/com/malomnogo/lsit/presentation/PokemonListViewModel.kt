@@ -31,9 +31,10 @@ class PokemonListViewModel(
         _uiState.value = PokemonListUiState.Progress
         viewModelScope.launch {
             val result = repository.fetchPokemonList()
-            withContext(Dispatchers.Main) {
-                _uiState.value = mapper.map(result)
+            val mapped = withContext(Dispatchers.Default) {
+                mapper.map(result)
             }
+            _uiState.value = mapped
         }
     }
 }

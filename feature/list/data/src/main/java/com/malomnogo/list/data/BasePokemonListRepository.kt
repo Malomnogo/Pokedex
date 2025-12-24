@@ -15,7 +15,7 @@ class BasePokemonListRepository(
     override fun fetchPokemonList(): Flow<PagingData<PokemonDomain>> {
         return Pager(
             config = PagingConfig(
-                pageSize = 20,
+                pageSize = 30,
                 enablePlaceholders = false
             ),
             pagingSourceFactory = {

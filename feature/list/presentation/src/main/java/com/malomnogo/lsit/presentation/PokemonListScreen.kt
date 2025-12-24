@@ -80,10 +80,14 @@ private fun PokemonListContent(
             ) {
                 items(
                     count = pokemonList.itemCount,
+                    // Для ключа используем peek, чтобы не триггерить загрузку лишний раз при расчете ключей
                     key = { index -> pokemonList.peek(index)?.id ?: index }
                 ) { index ->
-                    val item = pokemonList.peek(index)
-                    item?.let {
+                    // ВАЖНО: Здесь используем [] (get), чтобы библиотека поняла, что элемент отображен
+                    // и нужно подгружать следующую страницу
+                    val item = pokemonList[index]
+                    
+                    if (item != null) {
                         PokemonItem(
                             item = item,
                             onClick = onPokemonClick

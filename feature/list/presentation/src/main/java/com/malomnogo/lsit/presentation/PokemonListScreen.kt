@@ -32,7 +32,7 @@ fun PokemonListScreen(
         modifier = modifier,
         uiState = uiState,
         onIntent = viewModel::onIntent,
-        onPokemonClick = onPokemonClick
+        onPokemonClick = onPokemonClick,
     )
 }
 
@@ -61,7 +61,7 @@ private fun PokemonListContent(
                 items(uiState.pokemonList) { pokemonUi ->
                     PokemonItem(
                         item = pokemonUi,
-                        modifier = Modifier.clickable { onPokemonClick(pokemonUi.id) }
+                        modifier = Modifier.clickable { onPokemonClick(pokemonUi.id) },
                     )
                 }
             }
@@ -71,11 +71,11 @@ private fun PokemonListContent(
             Column(
                 modifier = modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                verticalArrangement = Arrangement.Center,
             ) {
                 Text(
                     text = uiState.message,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
                 )
                 Button(onClick = {
                     onIntent(PokemonListIntent.Retry)
@@ -94,7 +94,7 @@ private fun PreviewPokemonListLoading() {
         modifier = Modifier.fillMaxSize(),
         uiState = PokemonListUiState.Progress,
         onIntent = {},
-        onPokemonClick = {}
+        onPokemonClick = {},
     )
 }
 
@@ -105,7 +105,7 @@ private fun PreviewPokemonListError() {
         modifier = Modifier.fillMaxSize(),
         uiState = PokemonListUiState.Error("Something went wrong"),
         onIntent = {},
-        onPokemonClick = {}
+        onPokemonClick = {},
     )
 }
 
@@ -125,6 +125,6 @@ private fun PreviewPokemonListSuccess() {
                     ),
             ),
         onIntent = {},
-        onPokemonClick = {}
+        onPokemonClick = {},
     )
 }

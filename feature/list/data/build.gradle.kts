@@ -11,7 +11,6 @@ dependencies {
     implementation(project(":feature:list:domain"))
     implementation(project(":core:data"))
     implementation(project(":core:common"))
-    
     implementation(libs.kotlinx.coroutines.core)
     implementation(project(":core:model"))
 }

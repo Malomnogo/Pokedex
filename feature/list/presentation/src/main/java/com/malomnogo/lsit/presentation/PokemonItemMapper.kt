@@ -9,7 +9,6 @@ interface PokemonItemMapper {
     class Base(
         private val generateImage: GeneratePokemonImageUrl,
     ) : PokemonItemMapper {
-
         override fun map(input: PokemonDomain): PokemonUiItem =
             with(input) {
                 PokemonUiItem(

@@ -12,16 +12,16 @@ class BasePokemonListRepository(
     private val cloudDataSource: PokemonCloudDataSource,
     private val handleError: HandleError,
     private val mapper: PokemonCloudMapper<PokemonDomain>,
-    private val dispatchers: AppDispatchers
+    private val dispatchers: AppDispatchers,
 ) : PokemonListRepository {
-
-    override suspend fun fetchPokemonList(): PokemonListResult = withContext(dispatchers.io) {
-        try {
-            val pokemonList = cloudDataSource.fetchPokemonList(0)
-            val domainList = pokemonList.map { mapper.map(it) }
-            PokemonListResult.Success(domainList)
-        } catch (e: Exception) {
-            PokemonListResult.Error(handleError.handle(e))
+    override suspend fun fetchPokemonList(): PokemonListResult =
+        withContext(dispatchers.io) {
+            try {
+                val pokemonList = cloudDataSource.fetchPokemonList(0)
+                val domainList = pokemonList.map { mapper.map(it) }
+                PokemonListResult.Success(domainList)
+            } catch (e: Exception) {
+                PokemonListResult.Error(handleError.handle(e))
+            }
         }
-    }
 }

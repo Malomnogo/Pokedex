@@ -36,7 +36,7 @@ internal class PokemonListViewModelTest {
         viewModel =
             PokemonListViewModel(
                 repository = repository,
-                mapper = stateMapper
+                mapper = stateMapper,
             )
     }
 
@@ -45,7 +45,7 @@ internal class PokemonListViewModelTest {
         runTest {
             repository.returnSuccess()
             createViewModel()
-            
+
             val actual: StateFlow<PokemonListUiState> = viewModel.uiState
             val expected =
                 PokemonListUiState.Base(
@@ -70,7 +70,7 @@ internal class PokemonListViewModelTest {
                 )
 
             assertEquals(PokemonListUiState.Progress, actual.value)
-            
+
             advanceUntilIdle()
             assertEquals(expected, actual.value)
         }
@@ -80,10 +80,10 @@ internal class PokemonListViewModelTest {
         runTest {
             repository.returnError()
             createViewModel()
-            
+
             val actual: StateFlow<PokemonListUiState> = viewModel.uiState
             val expected = PokemonListUiState.Error(message = "No internet connection")
-            
+
             assertEquals(PokemonListUiState.Progress, actual.value)
             advanceUntilIdle()
             assertEquals(expected, actual.value)
@@ -99,10 +99,10 @@ internal class PokemonListViewModelTest {
         runTest {
             repository.returnError()
             createViewModel()
-            
+
             val actual: StateFlow<PokemonListUiState> = viewModel.uiState
             var expected: PokemonListUiState = PokemonListUiState.Error(message = "No internet connection")
-            
+
             assertEquals(PokemonListUiState.Progress, actual.value)
             advanceUntilIdle()
             assertEquals(expected, actual.value)
@@ -129,7 +129,7 @@ internal class PokemonListViewModelTest {
                             ),
                         ),
                 )
-            
+
             viewModel.onIntent(PokemonListIntent.Retry)
             assertEquals(PokemonListUiState.Progress, actual.value)
             advanceUntilIdle()

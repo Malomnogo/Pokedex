@@ -9,19 +9,17 @@ import java.io.IOException
 
 class BaseHandleError(
     private val provideResources: ProvideResources,
-    private val json: Json
+    private val json: Json,
 ) : HandleError {
-
-    override fun handle(e: Throwable): String {
-        return when (e) {
+    override fun handle(e: Throwable): String =
+        when (e) {
             is HttpException -> handleHttpError(e)
             is IOException -> provideResources.noInternetConnectionMessage()
             else -> e.message ?: provideResources.serviceUnavailableMessage()
         }
-    }
 
-    private fun handleHttpError(e: HttpException): String {
-        return try {
+    private fun handleHttpError(e: HttpException): String =
+        try {
             val errorBody = e.response()?.errorBody()?.string()
             if (errorBody != null) {
                 val errorResponse = json.decodeFromString<PokemonErrorResponse>(errorBody)
@@ -32,5 +30,4 @@ class BaseHandleError(
         } catch (_: Exception) {
             provideResources.errorParsingServerResponse()
         }
-    }
 }

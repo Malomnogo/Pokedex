@@ -7,7 +7,8 @@ import org.koin.core.module.dsl.bind
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
-val coreDataModule = module {
-    singleOf(PokemonCloudDataSource::Base) { bind<PokemonCloudDataSource>() }
-    singleOf(::BaseHandleError) { bind<HandleError>() }
-}
+val coreDataModule =
+    module {
+        singleOf(PokemonCloudDataSource::Base) { bind<PokemonCloudDataSource>() }
+        singleOf(::BaseHandleError) { bind<HandleError>() }
+    }

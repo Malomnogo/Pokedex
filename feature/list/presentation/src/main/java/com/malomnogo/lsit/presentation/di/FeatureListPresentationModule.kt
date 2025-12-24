@@ -8,8 +8,9 @@ import org.koin.core.module.dsl.singleOf
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
-val featureListPresentationModule = module {
-    singleOf(PokemonItemMapper::Base) { bind<PokemonItemMapper>() }
-    singleOf(PokemonListStateMapper::Base) { bind<PokemonListStateMapper>() }
-    viewModelOf(::PokemonListViewModel)
-}
+val featureListPresentationModule =
+    module {
+        singleOf(PokemonItemMapper::Base) { bind<PokemonItemMapper>() }
+        singleOf(PokemonListStateMapper::Base) { bind<PokemonListStateMapper>() }
+        viewModelOf(::PokemonListViewModel)
+    }

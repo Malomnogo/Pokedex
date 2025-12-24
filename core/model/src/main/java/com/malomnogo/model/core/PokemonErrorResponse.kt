@@ -8,5 +8,5 @@ data class PokemonErrorResponse(
     @SerialName("code")
     val code: Int? = null,
     @SerialName("message")
-    val message: String? = null
+    val message: String? = null,
 )

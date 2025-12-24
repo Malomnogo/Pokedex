@@ -13,30 +13,27 @@ import androidx.navigation.compose.rememberNavController
 import com.malomnogo.lsit.presentation.navigation.PokemonListRoute
 import com.malomnogo.lsit.presentation.navigation.pokemonListScreen
 import com.malomnogo.ui.theme.PokedexTheme
-import org.koin.compose.KoinContext
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            KoinContext {
-                PokedexTheme {
-                    val navController = rememberNavController()
+            PokedexTheme {
+                val navController = rememberNavController()
 
-                    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                        NavHost(
-                            navController = navController,
-                            startDestination = PokemonListRoute,
-                            modifier = Modifier.padding(innerPadding)
-                        ) {
-                            pokemonListScreen(
-                                onPokemonClick = { pokemonId ->
-                                    // TODO: Navigate to details
-                                    // navController.navigateToPokemonDetails(pokemonId)
-                                }
-                            )
-                        }
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    NavHost(
+                        navController = navController,
+                        startDestination = PokemonListRoute,
+                        modifier = Modifier.padding(innerPadding),
+                    ) {
+                        pokemonListScreen(
+                            onPokemonClick = { pokemonId ->
+                                // TODO: Navigate to details
+                                // navController.navigateToPokemonDetails(pokemonId)
+                            },
+                        )
                     }
                 }
             }

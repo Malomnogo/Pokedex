@@ -80,24 +80,18 @@ private fun PokemonListContent(
             ) {
                 items(
                     count = pokemonList.itemCount,
-                    key = { index ->
-                        // Используем ID покемона как ключ, если он доступен, иначе индекс
-                        pokemonList[index]?.id ?: index
-                    }
+                    key = { index -> pokemonList.peek(index)?.id ?: index }
                 ) { index ->
-                    val item = pokemonList[index]
-                    if (item != null) {
+                    val item = pokemonList.peek(index)
+                    item?.let {
                         PokemonItem(
                             item = item,
                             onClick = onPokemonClick
                         )
-                    } else {
-                        // Placeholder если нужен, но с enablePlaceholders = false сюда не зайдет
                     }
                 }
 
-                // Обработка состояния загрузки следующей страницы (footer)
-                when (val appendState = pokemonList.loadState.append) {
+                when (pokemonList.loadState.append) {
                     is LoadState.Loading -> {
                         item(span = { GridItemSpan(maxLineSpan) }) {
                             Box(

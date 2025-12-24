@@ -1,169 +1,119 @@
 package com.malomnogo.lsit.presentation
 
-import com.malomnogo.GeneratePokemonImageUrl
+import androidx.paging.AsyncPagingDataDiffer
+import androidx.paging.PagingData
 import com.malomnogo.domain.PokemonDomain
 import com.malomnogo.domain.PokemonListRepository
-import com.malomnogo.domain.PokemonListResult
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class PokemonListViewModelTest {
-    private lateinit var viewModel: PokemonListViewModel
-    private lateinit var repository: FakePokemonListRepository
-    private lateinit var generateImageUrl: GeneratePokemonImageUrl
-    private lateinit var itemMapper: PokemonItemMapper
-    private lateinit var stateMapper: PokemonListStateMapper
 
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
+    private lateinit var repository: FakePokemonListRepository
+    private lateinit var itemMapper: FakePokemonMapper
+    private lateinit var viewModel: PokemonListViewModel
+    private lateinit var differ: AsyncPagingDataDiffer<PokemonUiItem>
+
     @Before
     fun setup() {
         repository = FakePokemonListRepository()
-        generateImageUrl = FakeGenerateImageUrl()
-        itemMapper = PokemonItemMapper.Base(generateImageUrl)
-        stateMapper = PokemonListStateMapper.Base(itemMapper)
+        itemMapper = FakePokemonMapper()
+        differ = pagingDiffer()
     }
 
     private fun createViewModel() {
-        viewModel =
-            PokemonListViewModel(
-                repository = repository,
-                mapper = stateMapper,
-            )
+        viewModel = PokemonListViewModel(
+            repository = repository,
+            itemMapper = itemMapper
+        )
     }
 
     @Test
-    fun `success first time (init)`() =
-        runTest {
-            repository.returnSuccess()
-            createViewModel()
+    fun `pokemonList emits mapped paging data`() = runTest {
+        repository.returnItems(
+            listOf(
+                PokemonDomain(1, "Bulbasaur"),
+                PokemonDomain(4, "Charmander"),
+                PokemonDomain(7, "Squirtle")
+            )
+        )
 
-            val actual: StateFlow<PokemonListUiState> = viewModel.uiState
-            val expected =
-                PokemonListUiState.Base(
-                    pokemonList =
-                        listOf(
-                            PokemonUiItem(
-                                id = 1,
-                                name = "Bulbasaur",
-                                imageUrl = "https://1.jpg",
-                            ),
-                            PokemonUiItem(
-                                id = 4,
-                                name = "Charmander",
-                                imageUrl = "https://4.jpg",
-                            ),
-                            PokemonUiItem(
-                                id = 7,
-                                name = "Squirtle",
-                                imageUrl = "https://7.jpg",
-                            ),
-                        ),
-                )
+        createViewModel()
 
-            assertEquals(PokemonListUiState.Progress, actual.value)
+        differ.submitData(viewModel.pokemonList.first())
+        advanceUntilIdle()
 
-            advanceUntilIdle()
-            assertEquals(expected, actual.value)
-        }
+        val items = differ.snapshot().items
+        assertEquals(listOf(1, 4, 7), items.map { it.id })
+    }
 
     @Test
-    fun `error twice`() =
-        runTest {
-            repository.returnError()
-            createViewModel()
+    fun `pokemonList emits empty list when repository returns empty paging data`() = runTest {
+        // GIVEN
+        repository.returnEmpty()
+        createViewModel()
 
-            val actual: StateFlow<PokemonListUiState> = viewModel.uiState
-            val expected = PokemonListUiState.Error(message = "No internet connection")
+        differ.submitData(viewModel.pokemonList.first())
+        advanceUntilIdle()
 
-            assertEquals(PokemonListUiState.Progress, actual.value)
-            advanceUntilIdle()
-            assertEquals(expected, actual.value)
-
-            viewModel.onIntent(PokemonListIntent.Retry)
-            assertEquals(PokemonListUiState.Progress, actual.value)
-            advanceUntilIdle()
-            assertEquals(expected, actual.value)
-        }
+        assertTrue(differ.snapshot().items.isEmpty())
+    }
 
     @Test
-    fun `success after error`() =
-        runTest {
-            repository.returnError()
-            createViewModel()
+    fun `itemMapper is called for each domain item`() = runTest {
+        // GIVEN
+        val domainItems = listOf(
+            PokemonDomain(1, "Bulbasaur"),
+            PokemonDomain(4, "Charmander"),
+            PokemonDomain(7, "Squirtle")
+        )
+        repository.returnItems(domainItems)
+        createViewModel()
 
-            val actual: StateFlow<PokemonListUiState> = viewModel.uiState
-            var expected: PokemonListUiState = PokemonListUiState.Error(message = "No internet connection")
+        differ.submitData(viewModel.pokemonList.first())
+        advanceUntilIdle()
 
-            assertEquals(PokemonListUiState.Progress, actual.value)
-            advanceUntilIdle()
-            assertEquals(expected, actual.value)
+        assertEquals(3, itemMapper.callCount)
+        assertEquals(domainItems, itemMapper.mappedItems)
+    }
+}
 
-            repository.returnSuccess()
-            expected =
-                PokemonListUiState.Base(
-                    pokemonList =
-                        listOf(
-                            PokemonUiItem(
-                                id = 1,
-                                name = "Bulbasaur",
-                                imageUrl = "https://1.jpg",
-                            ),
-                            PokemonUiItem(
-                                id = 4,
-                                name = "Charmander",
-                                imageUrl = "https://4.jpg",
-                            ),
-                            PokemonUiItem(
-                                id = 7,
-                                name = "Squirtle",
-                                imageUrl = "https://7.jpg",
-                            ),
-                        ),
-                )
+private class FakePokemonMapper : PokemonItemMapper {
+    var callCount = 0
+        private set
+    val mappedItems = mutableListOf<PokemonDomain>()
 
-            viewModel.onIntent(PokemonListIntent.Retry)
-            assertEquals(PokemonListUiState.Progress, actual.value)
-            advanceUntilIdle()
-            assertEquals(expected, actual.value)
-        }
+    override fun map(input: PokemonDomain): PokemonUiItem {
+        callCount++
+        mappedItems += input
+        return PokemonUiItem(id = input.id, name = input.name, imageUrl = "stub", number = "stub")
+    }
 }
 
 private class FakePokemonListRepository : PokemonListRepository {
-    lateinit var result: PokemonListResult
 
-    fun returnSuccess() {
-        result =
-            PokemonListResult.Success(
-                pokemonList =
-                    listOf(
-                        PokemonDomain(
-                            id = 1,
-                            name = "Bulbasaur",
-                        ),
-                        PokemonDomain(
-                            id = 4,
-                            name = "Charmander",
-                        ),
-                        PokemonDomain(
-                            id = 7,
-                            name = "Squirtle",
-                        ),
-                    ),
-            )
+    private var pagingData: PagingData<PokemonDomain> = PagingData.from(emptyList())
+
+    fun returnItems(items: List<PokemonDomain>) {
+        pagingData = PagingData.from(items)
     }
 
-    fun returnError() {
-        result = PokemonListResult.Error(message = "No internet connection")
+    fun returnEmpty() {
+        pagingData = PagingData.from(emptyList())
     }
 
-    override suspend fun fetchPokemonList(): PokemonListResult = result
+    override fun fetchPokemonList(): Flow<PagingData<PokemonDomain>> = flowOf(pagingData)
 }

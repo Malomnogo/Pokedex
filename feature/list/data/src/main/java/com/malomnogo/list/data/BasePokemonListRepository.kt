@@ -15,10 +15,15 @@ class BasePokemonListRepository(
     override fun fetchPokemonList(): Flow<PagingData<PokemonDomain>> {
         return Pager(
             config = PagingConfig(
-                pageSize = 20, // Или другое значение, которое вам подходит
+                pageSize = 20,
                 enablePlaceholders = false
             ),
-            pagingSourceFactory = { PokemonPagingSource(cloudDataSource, mapper) }
+            pagingSourceFactory = {
+                PokemonPagingSource(
+                    cloudDataSource = cloudDataSource,
+                    mapper = mapper
+                )
+            }
         ).flow
     }
 }

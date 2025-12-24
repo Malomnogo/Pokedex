@@ -14,12 +14,10 @@ fun NavController.navigateToPokemonList(navOptions: NavOptions? = null) {
     navigate(route = PokemonListRoute, navOptions = navOptions)
 }
 
-fun NavGraphBuilder.pokemonListScreen(
-    onPokemonClick: (Int) -> Unit
-) {
+fun NavGraphBuilder.pokemonListScreen(onPokemonClick: (Int) -> Unit) {
     composable<PokemonListRoute> {
         PokemonListScreen(
-            onPokemonClick = onPokemonClick
+            onPokemonClick = onPokemonClick,
         )
     }
 }

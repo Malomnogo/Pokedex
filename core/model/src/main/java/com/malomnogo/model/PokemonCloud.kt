@@ -8,7 +8,7 @@ data class PokemonCloud(
     @SerialName("name")
     val name: String,
     @SerialName("url")
-    val url: String
+    val url: String,
 ) {
     val id: Int
         get() = url.trimEnd('/').substringAfterLast('/').toIntOrNull() ?: 0

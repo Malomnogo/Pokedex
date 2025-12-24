@@ -7,7 +7,6 @@ plugins {
 dependencies {
     implementation(platform(libs.koin.bom))
     implementation(libs.koin.core)
-    
     implementation(libs.retrofit.core)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.retrofit.kotlin.serialization)

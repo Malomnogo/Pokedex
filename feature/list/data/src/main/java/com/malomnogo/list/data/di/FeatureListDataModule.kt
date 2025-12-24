@@ -8,9 +8,10 @@ import org.koin.core.module.dsl.bind
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
-val featureListDataModule = module {
-    single<PokemonCloudMapper<PokemonDomain>> {
-        PokemonCloudMapper.ToDomain
+val featureListDataModule =
+    module {
+        single<PokemonCloudMapper<PokemonDomain>> {
+            PokemonCloudMapper.ToDomain
+        }
+        singleOf(::BasePokemonListRepository) { bind<PokemonListRepository>() }
     }
-    singleOf(::BasePokemonListRepository) { bind<PokemonListRepository>() }
-}

@@ -12,5 +12,5 @@ data class BasePagingResponse<T>(
     @SerialName("previous")
     val previous: String?,
     @SerialName("results")
-    val results: List<T>
+    val results: List<T>,
 )

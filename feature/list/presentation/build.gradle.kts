@@ -27,18 +27,14 @@ android {
 dependencies {
     implementation(platform(libs.koin.bom))
     implementation(libs.koin.androidx.compose)
-
     implementation(project(":feature:list:domain"))
     implementation(project(":core:ui"))
     implementation(project(":core:common"))
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
-    
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
-
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.junit)
     testImplementation(libs.junit.jupiter)

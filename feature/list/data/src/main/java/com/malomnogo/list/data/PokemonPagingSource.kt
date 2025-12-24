@@ -10,6 +10,10 @@ class PokemonPagingSource(
     private val mapper: PokemonCloudMapper<PokemonDomain>,
 ) : PagingSource<Int, PokemonDomain>() {
 
+    companion object {
+        private const val FIRST_GEN_LIMIT = 151
+    }
+
     override fun getRefreshKey(state: PagingState<Int, PokemonDomain>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
             val anchorPage = state.closestPageToPosition(anchorPosition)
@@ -17,20 +21,30 @@ class PokemonPagingSource(
         }
     }
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, PokemonDomain> {
-        return try {
+    override suspend fun load(params: LoadParams<Int>) = try {
             val page = params.key ?: 0
             val response = cloudDataSource.fetchPokemonList(page)
 
-            val domainList = response.map { mapper.map(it) }
+            val domainList = response
+                .mapNotNull {
+                    val id = it.id
+                    if (id <= FIRST_GEN_LIMIT) mapper.map(it) else null
+                }
+
+            val nextKey = if (domainList.isEmpty() || domainList.last().id >= FIRST_GEN_LIMIT)
+                null
+            else
+                page + 1
 
             LoadResult.Page(
                 data = domainList,
-                prevKey = if (page == 0) null else page - 1,
-                nextKey = if (domainList.isEmpty()) null else page + 1
+                prevKey = if (page == 0)
+                    null
+                else
+                    page - 1,
+                nextKey = nextKey
             )
         } catch (e: Exception) {
             LoadResult.Error(e)
         }
     }
-}

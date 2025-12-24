@@ -1,5 +1,8 @@
 package com.malomnogo.domain
 
+import androidx.paging.PagingData
+import kotlinx.coroutines.flow.Flow
+
 interface PokemonListRepository {
-    suspend fun fetchPokemonList(): PokemonListResult
+    fun fetchPokemonList(): Flow<PagingData<PokemonDomain>>
 }

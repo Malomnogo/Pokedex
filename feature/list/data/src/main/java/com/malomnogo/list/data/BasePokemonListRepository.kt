@@ -1,27 +1,29 @@
 package com.malomnogo.list.data
 
-import com.malomnogo.common.AppDispatchers
-import com.malomnogo.common.HandleError
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.malomnogo.data.PokemonCloudDataSource
 import com.malomnogo.domain.PokemonDomain
 import com.malomnogo.domain.PokemonListRepository
-import com.malomnogo.domain.PokemonListResult
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.Flow
 
 class BasePokemonListRepository(
     private val cloudDataSource: PokemonCloudDataSource,
-    private val handleError: HandleError,
     private val mapper: PokemonCloudMapper<PokemonDomain>,
-    private val dispatchers: AppDispatchers,
 ) : PokemonListRepository {
-    override suspend fun fetchPokemonList(): PokemonListResult =
-        withContext(dispatchers.io) {
-            try {
-                val pokemonList = cloudDataSource.fetchPokemonList(0)
-                val domainList = pokemonList.map { mapper.map(it) }
-                PokemonListResult.Success(domainList)
-            } catch (e: Exception) {
-                PokemonListResult.Error(handleError.handle(e))
+    override fun fetchPokemonList(): Flow<PagingData<PokemonDomain>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 30,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = {
+                PokemonPagingSource(
+                    cloudDataSource = cloudDataSource,
+                    mapper = mapper
+                )
             }
-        }
+        ).flow
+    }
 }

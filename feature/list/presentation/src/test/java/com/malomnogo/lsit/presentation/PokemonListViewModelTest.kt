@@ -18,7 +18,6 @@ import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class PokemonListViewModelTest {
-
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
@@ -35,60 +34,63 @@ internal class PokemonListViewModelTest {
     }
 
     private fun createViewModel() {
-        viewModel = PokemonListViewModel(
-            repository = repository,
-            itemMapper = itemMapper
-        )
-    }
-
-    @Test
-    fun `pokemonList emits mapped paging data`() = runTest {
-        repository.returnItems(
-            listOf(
-                PokemonDomain(1, "Bulbasaur"),
-                PokemonDomain(4, "Charmander"),
-                PokemonDomain(7, "Squirtle")
+        viewModel =
+            PokemonListViewModel(
+                repository = repository,
+                itemMapper = itemMapper,
             )
-        )
-
-        createViewModel()
-
-        differ.submitData(viewModel.pokemonList.first())
-        advanceUntilIdle()
-
-        val items = differ.snapshot().items
-        assertEquals(listOf(1, 4, 7), items.map { it.id })
     }
 
     @Test
-    fun `pokemonList emits empty list when repository returns empty paging data`() = runTest {
-        // GIVEN
-        repository.returnEmpty()
-        createViewModel()
+    fun `pokemonList emits mapped paging data`() =
+        runTest {
+            repository.returnItems(
+                listOf(
+                    PokemonDomain(1, "Bulbasaur"),
+                    PokemonDomain(4, "Charmander"),
+                    PokemonDomain(7, "Squirtle"),
+                ),
+            )
 
-        differ.submitData(viewModel.pokemonList.first())
-        advanceUntilIdle()
+            createViewModel()
 
-        assertTrue(differ.snapshot().items.isEmpty())
-    }
+            differ.submitData(viewModel.pokemonList.first())
+            advanceUntilIdle()
+
+            val items = differ.snapshot().items
+            assertEquals(listOf(1, 4, 7), items.map { it.id })
+        }
 
     @Test
-    fun `itemMapper is called for each domain item`() = runTest {
-        // GIVEN
-        val domainItems = listOf(
-            PokemonDomain(1, "Bulbasaur"),
-            PokemonDomain(4, "Charmander"),
-            PokemonDomain(7, "Squirtle")
-        )
-        repository.returnItems(domainItems)
-        createViewModel()
+    fun `pokemonList emits empty list when repository returns empty paging data`() =
+        runTest {
+            repository.returnEmpty()
+            createViewModel()
 
-        differ.submitData(viewModel.pokemonList.first())
-        advanceUntilIdle()
+            differ.submitData(viewModel.pokemonList.first())
+            advanceUntilIdle()
 
-        assertEquals(3, itemMapper.callCount)
-        assertEquals(domainItems, itemMapper.mappedItems)
-    }
+            assertTrue(differ.snapshot().items.isEmpty())
+        }
+
+    @Test
+    fun `itemMapper is called for each domain item`() =
+        runTest {
+            val domainItems =
+                listOf(
+                    PokemonDomain(1, "Bulbasaur"),
+                    PokemonDomain(4, "Charmander"),
+                    PokemonDomain(7, "Squirtle"),
+                )
+            repository.returnItems(domainItems)
+            createViewModel()
+
+            differ.submitData(viewModel.pokemonList.first())
+            advanceUntilIdle()
+
+            assertEquals(3, itemMapper.callCount)
+            assertEquals(domainItems, itemMapper.mappedItems)
+        }
 }
 
 private class FakePokemonMapper : PokemonItemMapper {
@@ -104,7 +106,6 @@ private class FakePokemonMapper : PokemonItemMapper {
 }
 
 private class FakePokemonListRepository : PokemonListRepository {
-
     private var pagingData: PagingData<PokemonDomain> = PagingData.from(emptyList())
 
     fun returnItems(items: List<PokemonDomain>) {

@@ -13,10 +13,10 @@ class PokemonListViewModel(
     repository: PokemonListRepository,
     private val itemMapper: PokemonItemMapper,
 ) : ViewModel() {
-
-    val pokemonList: Flow<PagingData<PokemonUiItem>> = repository.fetchPokemonList()
-        .map { pagingData ->
-            pagingData.map { itemMapper.map(it) }
-        }
-        .cachedIn(viewModelScope)
+    val pokemonList: Flow<PagingData<PokemonUiItem>> =
+        repository
+            .fetchPokemonList()
+            .map { pagingData ->
+                pagingData.map { itemMapper.map(it) }
+            }.cachedIn(viewModelScope)
 }

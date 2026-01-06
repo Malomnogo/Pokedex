@@ -21,7 +21,7 @@ class BaseHandleError(
     private fun handleHttpError(e: HttpException): String =
         try {
             val errorBody = e.response()?.errorBody()?.string()
-            if (errorBody != null) {
+            if (!errorBody.isNullOrBlank()) {
                 val errorResponse = json.decodeFromString<PokemonErrorResponse>(errorBody)
                 errorResponse.message ?: provideResources.serverErrorCode(e.code())
             } else {

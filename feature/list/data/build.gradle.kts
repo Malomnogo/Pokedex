@@ -14,4 +14,7 @@ dependencies {
     implementation(libs.kotlinx.coroutines.core)
     implementation(project(":core:model"))
     implementation(libs.androidx.paging.common)
+
+    testImplementation(libs.androidx.paging.common)
+    testImplementation(libs.androidx.paging.testing)
 }

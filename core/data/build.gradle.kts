@@ -14,6 +14,5 @@ dependencies {
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.retrofit.core)
 
-    testImplementation(libs.junit)
     testImplementation(libs.okhttp.logging)
 }

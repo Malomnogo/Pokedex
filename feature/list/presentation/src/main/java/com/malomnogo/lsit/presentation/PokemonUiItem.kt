@@ -28,34 +28,36 @@ data class PokemonUiItem(
 fun PokemonItem(
     modifier: Modifier = Modifier,
     item: PokemonUiItem,
-    onClick: (id: Int) -> Unit
+    onClick: (id: Int) -> Unit,
 ) {
     Card(
         modifier = modifier.aspectRatio(1f),
         onClick = {
             onClick.invoke(item.id)
-        }
+        },
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-
             Text(
-                modifier = Modifier
-                    .align(Alignment.End)
-                    .padding(top = 4.dp, end = 8.dp),
+                modifier =
+                    Modifier
+                        .align(Alignment.End)
+                        .padding(top = 4.dp, end = 8.dp),
                 style = MaterialTheme.typography.titleSmall,
                 text = item.number,
             )
 
             Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth(),
-                contentAlignment = Alignment.Center
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .fillMaxWidth(),
+                contentAlignment = Alignment.Center,
             ) {
                 PokemonListItemImage(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(8.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .padding(8.dp),
                     pokemon = item,
                 )
             }
@@ -74,16 +76,17 @@ fun PokemonItem(
 @Preview(showBackground = true)
 @Composable
 private fun PokemonItemPreview() {
-    val mock = PokemonUiItem(
-        id = 1,
-        name = "Bulbasaur",
-        number = "#001",
-        imageUrl = "",
-    )
+    val mock =
+        PokemonUiItem(
+            id = 1,
+            name = "Bulbasaur",
+            number = "#001",
+            imageUrl = "",
+        )
     PokedexTheme {
         PokemonItem(
             item = mock,
-            onClick = {}
+            onClick = {},
         )
     }
 }

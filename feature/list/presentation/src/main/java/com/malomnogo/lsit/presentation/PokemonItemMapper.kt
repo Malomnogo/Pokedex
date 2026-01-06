@@ -17,7 +17,7 @@ interface PokemonItemMapper {
                     id = id,
                     name = name,
                     imageUrl = generateImage.generateUrl(id),
-                    number = generateNumber.generateNumber(id)
+                    number = generateNumber.generateNumber(id),
                 )
             }
     }

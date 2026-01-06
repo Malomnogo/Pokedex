@@ -11,7 +11,6 @@ import retrofit2.Response
 import java.io.IOException
 
 class BaseHandleErrorTest {
-
     private val provideResources = FakeProvideResources()
     private val json = Json { ignoreUnknownKeys = true }
     private val handleError = BaseHandleError(provideResources, json)
@@ -75,13 +74,13 @@ class BaseHandleErrorTest {
 
     private fun httpException(
         code: Int,
-        body: String
+        body: String,
     ): HttpException =
         HttpException(
             Response.error<Any>(
                 code,
-                body.toResponseBody("application/json".toMediaTypeOrNull())
-            )
+                body.toResponseBody("application/json".toMediaTypeOrNull()),
+            ),
         )
 
     private class FakeProvideResources : ProvideResources {

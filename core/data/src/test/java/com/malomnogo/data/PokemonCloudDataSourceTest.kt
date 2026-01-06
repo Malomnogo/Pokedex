@@ -8,54 +8,57 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class PokemonCloudDataSourceTest {
-
     private val service = FakePokemonService()
     private val dataSource = PokemonCloudDataSource.Base(service)
 
     @Test
-    fun `fetch pokemon list calls service with correct offset and limit`() = runTest {
-        val page = 2
-        val expectedOffset = 40
-        val expectedLimit = 20
+    fun `fetch pokemon list calls service with correct offset and limit`() =
+        runTest {
+            val page = 2
+            val expectedOffset = 40
+            val expectedLimit = 20
 
-        dataSource.fetchPokemonList(page)
+            dataSource.fetchPokemonList(page)
 
-        assertEquals(expectedOffset, service.lastOffset)
-        assertEquals(expectedLimit, service.lastLimit)
-    }
+            assertEquals(expectedOffset, service.lastOffset)
+            assertEquals(expectedLimit, service.lastLimit)
+        }
 
     @Test
-    fun `fetch pokemon list returns results from service`() = runTest {
-        val expectedList = listOf(
-            PokemonCloud(name = "bulbasaur", url = "url1"),
-            PokemonCloud(name = "ivysaur", url = "url2")
-        )
-        service.returnResponse(
-            BasePagingResponse(
-                count = 100,
-                next = "next_url",
-                previous = "prev_url",
-                results = expectedList
+    fun `fetch pokemon list returns results from service`() =
+        runTest {
+            val expectedList =
+                listOf(
+                    PokemonCloud(name = "bulbasaur", url = "url1"),
+                    PokemonCloud(name = "ivysaur", url = "url2"),
+                )
+            service.returnResponse(
+                BasePagingResponse(
+                    count = 100,
+                    next = "next_url",
+                    previous = "prev_url",
+                    results = expectedList,
+                ),
             )
-        )
 
-        val result = dataSource.fetchPokemonList(0)
+            val result = dataSource.fetchPokemonList(0)
 
-        assertEquals(expectedList, result)
-    }
+            assertEquals(expectedList, result)
+        }
 
     private class FakePokemonService : PokemonService {
         var lastOffset: Int? = null
             private set
         var lastLimit: Int? = null
             private set
-        
-        private var responseToReturn = BasePagingResponse<PokemonCloud>(
-            count = 0,
-            next = null,
-            previous = null,
-            results = emptyList()
-        )
+
+        private var responseToReturn =
+            BasePagingResponse<PokemonCloud>(
+                count = 0,
+                next = null,
+                previous = null,
+                results = emptyList(),
+            )
 
         fun returnResponse(response: BasePagingResponse<PokemonCloud>) {
             responseToReturn = response
@@ -63,7 +66,7 @@ class PokemonCloudDataSourceTest {
 
         override suspend fun fetchPokemonList(
             offset: Int,
-            limit: Int
+            limit: Int,
         ): BasePagingResponse<PokemonCloud> {
             lastOffset = offset
             lastLimit = limit

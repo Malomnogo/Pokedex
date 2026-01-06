@@ -12,18 +12,18 @@ class BasePokemonListRepository(
     private val cloudDataSource: PokemonCloudDataSource,
     private val mapper: PokemonCloudMapper<PokemonDomain>,
 ) : PokemonListRepository {
-    override fun fetchPokemonList(): Flow<PagingData<PokemonDomain>> {
-        return Pager(
-            config = PagingConfig(
-                pageSize = 30,
-                enablePlaceholders = false
-            ),
+    override fun fetchPokemonList(): Flow<PagingData<PokemonDomain>> =
+        Pager(
+            config =
+                PagingConfig(
+                    pageSize = 30,
+                    enablePlaceholders = false,
+                ),
             pagingSourceFactory = {
                 PokemonPagingSource(
                     cloudDataSource = cloudDataSource,
-                    mapper = mapper
+                    mapper = mapper,
                 )
-            }
+            },
         ).flow
-    }
 }

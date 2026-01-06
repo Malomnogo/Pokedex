@@ -76,21 +76,21 @@ private fun PokemonListContent(
                 columns = GridCells.Adaptive(minSize = 105.dp),
                 contentPadding = PaddingValues(horizontal = 12.dp, vertical = 24.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 items(
                     count = pokemonList.itemCount,
                     // Для ключа используем peek, чтобы не триггерить загрузку лишний раз при расчете ключей
-                    key = { index -> pokemonList.peek(index)?.id ?: index }
+                    key = { index -> pokemonList.peek(index)?.id ?: index },
                 ) { index ->
                     // ВАЖНО: Здесь используем [] (get), чтобы библиотека поняла, что элемент отображен
                     // и нужно подгружать следующую страницу
                     val item = pokemonList[index]
-                    
+
                     if (item != null) {
                         PokemonItem(
                             item = item,
-                            onClick = onPokemonClick
+                            onClick = onPokemonClick,
                         )
                     }
                 }
@@ -99,10 +99,11 @@ private fun PokemonListContent(
                     is LoadState.Loading -> {
                         item(span = { GridItemSpan(maxLineSpan) }) {
                             Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(16.dp),
-                                contentAlignment = Alignment.Center
+                                modifier =
+                                    Modifier
+                                        .fillMaxWidth()
+                                        .padding(16.dp),
+                                contentAlignment = Alignment.Center,
                             ) {
                                 CircularProgressIndicator()
                             }
@@ -112,10 +113,11 @@ private fun PokemonListContent(
                     is LoadState.Error -> {
                         item(span = { GridItemSpan(maxLineSpan) }) {
                             Column(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(16.dp),
-                                horizontalAlignment = Alignment.CenterHorizontally
+                                modifier =
+                                    Modifier
+                                        .fillMaxWidth()
+                                        .padding(16.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally,
                             ) {
                                 Text("Error loading more items")
                                 Button(onClick = { pokemonList.retry() }) {

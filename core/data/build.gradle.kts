@@ -13,4 +13,7 @@ dependencies {
     implementation(project(":core:model"))
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.retrofit.core)
+
+    testImplementation(libs.junit)
+    testImplementation(libs.okhttp.logging)
 }

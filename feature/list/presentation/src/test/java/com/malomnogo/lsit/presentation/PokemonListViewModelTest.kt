@@ -62,7 +62,6 @@ internal class PokemonListViewModelTest {
 
     @Test
     fun `pokemonList emits empty list when repository returns empty paging data`() = runTest {
-        // GIVEN
         repository.returnEmpty()
         createViewModel()
 
@@ -74,7 +73,6 @@ internal class PokemonListViewModelTest {
 
     @Test
     fun `itemMapper is called for each domain item`() = runTest {
-        // GIVEN
         val domainItems = listOf(
             PokemonDomain(1, "Bulbasaur"),
             PokemonDomain(4, "Charmander"),

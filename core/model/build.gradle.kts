@@ -1,21 +1,9 @@
-import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
-
 plugins {
-    id("java-library")
-    alias(libs.plugins.jetbrains.kotlin.jvm)
-    id("org.jlleitschuh.gradle.ktlint") version "14.0.1"
+    id("pokedex.jvm.library")
+    id("pokedex.ktlint")
+    id("pokedex.kotlin.serialization") // <-- Добавляем этот плагин
 }
 
-kotlin {
-    jvmToolchain(17)
-}
-
-ktlint {
-    android = true
-    ignoreFailures = false
-    reporters {
-        reporter(ReporterType.PLAIN)
-        reporter(ReporterType.CHECKSTYLE)
-        reporter(ReporterType.SARIF)
-    }
+dependencies {
+    // implementation(libs.kotlinx.serialization.json) // Это уже есть внутри плагина, можно убрать или оставить
 }

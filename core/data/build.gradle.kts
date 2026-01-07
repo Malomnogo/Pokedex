@@ -1,25 +1,18 @@
-import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
-
 plugins {
-    id("java-library")
-    alias(libs.plugins.jetbrains.kotlin.jvm)
-    id("org.jlleitschuh.gradle.ktlint") version "14.0.1"
-}
-
-kotlin {
-    jvmToolchain(17)
+    id("pokedex.jvm.library")
+    id("pokedex.ktlint")
+    id("pokedex.kotlin.serialization")
 }
 
 dependencies {
-    implementation(project(":core:model"))
-}
+    implementation(platform(libs.koin.bom))
+    implementation(libs.koin.core)
 
-ktlint {
-    android = true
-    ignoreFailures = false
-    reporters {
-        reporter(ReporterType.PLAIN)
-        reporter(ReporterType.CHECKSTYLE)
-        reporter(ReporterType.SARIF)
-    }
+    api(project(":core:network"))
+    implementation(project(":core:common"))
+    implementation(project(":core:model"))
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.retrofit.core)
+
+    testImplementation(libs.okhttp.logging)
 }

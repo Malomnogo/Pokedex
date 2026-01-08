@@ -2,6 +2,7 @@ plugins {
     id("pokedex.android.application")
     id("pokedex.android.application.compose")
     id("pokedex.ktlint")
+    id("pokedex.android.dagger")
 }
 
 android {
@@ -27,10 +28,7 @@ android {
 }
 
 dependencies {
-    implementation(platform(libs.koin.bom))
-    implementation(libs.koin.android)
-    implementation(libs.koin.androidx.compose)
-
+    implementation(project(":feature:list:api"))
     implementation(project(":core:ui"))
     implementation(project(":core:common"))
     implementation(project(":core:network"))
@@ -44,6 +42,11 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
 
+    // Compose dependencies
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.graphics)
+    implementation(libs.androidx.compose.material3) // Added material3 for Scaffold
+    
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
 

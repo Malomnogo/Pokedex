@@ -6,8 +6,9 @@ import com.malomnogo.model.core.PokemonErrorResponse
 import kotlinx.serialization.json.Json
 import retrofit2.HttpException
 import java.io.IOException
+import javax.inject.Inject
 
-class BaseHandleError(
+class BaseHandleError @Inject constructor(
     private val provideResources: ProvideResources,
     private val json: Json,
 ) : HandleError {

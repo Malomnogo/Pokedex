@@ -2,12 +2,15 @@ package com.malomnogo.ui.di
 
 import com.malomnogo.GeneratePokemonImageUrl
 import com.malomnogo.GeneratePokemonNumber
-import org.koin.core.module.dsl.bind
-import org.koin.core.module.dsl.singleOf
-import org.koin.dsl.module
+import dagger.Binds
+import dagger.Module
 
-val coreUiModule =
-    module {
-        singleOf(GeneratePokemonImageUrl::DreamWorld) { bind<GeneratePokemonImageUrl>() }
-        singleOf(GeneratePokemonNumber::Base) { bind<GeneratePokemonNumber>() }
-    }
+@Module
+interface CoreUiModule {
+
+    @Binds
+    fun bindGeneratePokemonImageUrl(impl: GeneratePokemonImageUrl.DreamWorld): GeneratePokemonImageUrl
+
+    @Binds
+    fun bindGeneratePokemonNumber(impl: GeneratePokemonNumber.Base): GeneratePokemonNumber
+}

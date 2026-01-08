@@ -2,14 +2,13 @@ plugins {
     id("pokedex.jvm.library")
     id("pokedex.ktlint")
     id("pokedex.kotlin.serialization")
+    id("pokedex.android.dagger")
 }
 
 dependencies {
-    implementation(platform(libs.koin.bom))
-    implementation(libs.koin.core)
-    implementation(libs.retrofit.core)
-    implementation(libs.kotlinx.serialization.json)
-    implementation(libs.retrofit.kotlin.serialization)
-    implementation(libs.okhttp.logging)
+    api(libs.retrofit.core) // Changed to api
+    api(libs.kotlinx.serialization.json) // Changed to api
+    api(libs.retrofit.kotlin.serialization) // Changed to api
+    api(libs.okhttp.logging) // Changed to api
     implementation(project(":core:model"))
 }

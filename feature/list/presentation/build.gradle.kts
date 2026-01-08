@@ -2,48 +2,50 @@ plugins {
     id("pokedex.android.library")
     id("pokedex.android.library.compose")
     id("pokedex.ktlint")
-    id("pokedex.kotlin.serialization")
+    id("pokedex.android.dagger")
+    id("pokedex.kotlin.serialization") // Added serialization plugin
 }
 
 android {
     namespace = "com.malomnogo.lsit.presentation"
-
-    defaultConfig {
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro",
-            )
-        }
-    }
-
-    testOptions {
-        unitTests {
-            isReturnDefaultValues = true
-        }
-    }
 }
 
 dependencies {
-    implementation(platform(libs.koin.bom))
-    implementation(libs.koin.androidx.compose)
+    implementation(project(":feature:list:api"))
     implementation(project(":feature:list:domain"))
+    implementation(project(":feature:list:data"))
+    implementation(project(":core:model"))
     implementation(project(":core:ui"))
     implementation(project(":core:common"))
+    implementation(project(":core:data"))
+
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+
+    // Navigation dependency
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.kotlinx.serialization.json) // Added serialization dependency
+
+    // Paging dependencies
     implementation(libs.androidx.paging.runtime)
     implementation(libs.androidx.paging.compose)
-    implementation(libs.kotlinx.serialization.json)
-    testImplementation(libs.androidx.paging.testing)
+    implementation(libs.androidx.paging.common)
+
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.graphics)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.compose.material3)
+
+    implementation(libs.coil.compose)
+    implementation(libs.coil.svg)
+
+    testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    debugImplementation(libs.androidx.compose.ui.tooling)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
 }

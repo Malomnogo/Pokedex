@@ -4,37 +4,23 @@ import android.app.Application
 import coil.ImageLoader
 import coil.ImageLoaderFactory
 import coil.decode.SvgDecoder
-import com.malomnogo.common.ProvideResources
-import com.malomnogo.common.di.commonModule
-import com.malomnogo.data.di.coreDataModule
-import com.malomnogo.list.data.di.featureListDataModule
-import com.malomnogo.lsit.presentation.di.featureListPresentationModule
-import com.malomnogo.network.di.networkModule
-import com.malomnogo.ui.di.coreUiModule
-import org.koin.android.ext.koin.androidContext
-import org.koin.android.ext.koin.androidLogger
-import org.koin.core.context.startKoin
-import org.koin.dsl.module
+import com.malomnogo.common.AppDispatchers
+import com.malomnogo.common.HandleError
+import com.malomnogo.data.PokemonCloudDataSource
+import com.malomnogo.list.api.ListFeatureDependencies
+import com.malomnogo.pokedex.di.AppComponent
+import com.malomnogo.pokedex.di.DaggerAppComponent
 
 class PokedexApp :
     Application(),
-    ImageLoaderFactory {
+    ImageLoaderFactory,
+    ListFeatureDependencies {
+
+    lateinit var appComponent: AppComponent
+
     override fun onCreate() {
         super.onCreate()
-
-        startKoin {
-            androidLogger()
-            androidContext(this@PokedexApp)
-            modules(
-                networkModule,
-                commonModule,
-                coreDataModule,
-                coreUiModule,
-                featureListDataModule,
-                featureListPresentationModule,
-                appModule,
-            )
-        }
+        appComponent = DaggerAppComponent.factory().create(this)
     }
 
     override fun newImageLoader(): ImageLoader =
@@ -43,9 +29,9 @@ class PokedexApp :
             .components {
                 add(SvgDecoder.Factory())
             }.build()
-}
 
-val appModule =
-    module {
-        single<ProvideResources> { BaseProvideResources(get()) }
-    }
+    // Implementing ListFeatureDependencies by delegating to AppComponent
+    override fun appDispatchers(): AppDispatchers = appComponent.appDispatchers()
+    override fun handleError(): HandleError = appComponent.handleError()
+    override fun pokemonCloudDataSource(): PokemonCloudDataSource = appComponent.pokemonCloudDataSource()
+}

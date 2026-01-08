@@ -7,8 +7,9 @@ import com.malomnogo.data.PokemonCloudDataSource
 import com.malomnogo.domain.PokemonDomain
 import com.malomnogo.domain.PokemonListRepository
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class BasePokemonListRepository(
+class BasePokemonListRepository @Inject constructor(
     private val cloudDataSource: PokemonCloudDataSource,
     private val mapper: PokemonCloudMapper<PokemonDomain>,
 ) : PokemonListRepository {

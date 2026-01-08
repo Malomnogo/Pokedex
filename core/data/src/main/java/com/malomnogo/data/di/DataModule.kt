@@ -3,12 +3,18 @@ package com.malomnogo.data.di
 import com.malomnogo.common.HandleError
 import com.malomnogo.data.BaseHandleError
 import com.malomnogo.data.PokemonCloudDataSource
-import org.koin.core.module.dsl.bind
-import org.koin.core.module.dsl.singleOf
-import org.koin.dsl.module
+import dagger.Binds
+import dagger.Module
+import javax.inject.Singleton
 
-val coreDataModule =
-    module {
-        singleOf(PokemonCloudDataSource::Base) { bind<PokemonCloudDataSource>() }
-        singleOf(::BaseHandleError) { bind<HandleError>() }
-    }
+@Module
+interface DataModule {
+    
+    @Binds
+    @Singleton
+    fun bindPokemonCloudDataSource(impl: PokemonCloudDataSource.Base): PokemonCloudDataSource
+
+    @Binds
+    @Singleton
+    fun bindHandleError(impl: BaseHandleError): HandleError
+}

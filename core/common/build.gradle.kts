@@ -1,12 +1,9 @@
 plugins {
     id("pokedex.jvm.library")
     id("pokedex.ktlint")
+    id("pokedex.android.dagger")
 }
 
 dependencies {
     implementation(libs.kotlinx.coroutines.core)
-    implementation(libs.androidx.annotation)
-
-    implementation(platform(libs.koin.bom))
-    implementation(libs.koin.core)
 }

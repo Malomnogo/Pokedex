@@ -13,6 +13,7 @@ dependencies {
     implementation(libs.compose.compiler.gradlePlugin)
     implementation(libs.ktlint.gradlePlugin)
     implementation(libs.kotlin.serialization.gradlePlugin)
+    implementation(libs.ksp.gradlePlugin)
 }
 
 tasks.withType<KotlinCompile>().configureEach {
@@ -50,6 +51,10 @@ gradlePlugin {
         register("kotlinSerialization") {
             id = "pokedex.kotlin.serialization"
             implementationClass = "KotlinSerializationConventionPlugin"
+        }
+        register("androidDagger") {
+            id = "pokedex.android.dagger"
+            implementationClass = "AndroidDaggerConventionPlugin"
         }
     }
 }

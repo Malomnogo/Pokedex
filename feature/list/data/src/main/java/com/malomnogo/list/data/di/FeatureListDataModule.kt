@@ -4,14 +4,20 @@ import com.malomnogo.domain.PokemonDomain
 import com.malomnogo.domain.PokemonListRepository
 import com.malomnogo.list.data.BasePokemonListRepository
 import com.malomnogo.list.data.PokemonCloudMapper
-import org.koin.core.module.dsl.bind
-import org.koin.core.module.dsl.singleOf
-import org.koin.dsl.module
+import dagger.Binds
+import dagger.Module
+import dagger.Provides
 
-val featureListDataModule =
-    module {
-        single<PokemonCloudMapper<PokemonDomain>> {
-            PokemonCloudMapper.ToDomain
+@Module
+interface FeatureListDataModule {
+    
+    @Binds
+    fun bindPokemonListRepository(impl: BasePokemonListRepository): PokemonListRepository
+
+    companion object {
+        @Provides
+        fun providePokemonCloudMapper(): PokemonCloudMapper<PokemonDomain> {
+            return PokemonCloudMapper.ToDomain
         }
-        singleOf(::BasePokemonListRepository) { bind<PokemonListRepository>() }
     }
+}

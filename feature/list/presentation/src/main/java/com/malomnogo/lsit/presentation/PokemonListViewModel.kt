@@ -8,8 +8,9 @@ import androidx.paging.map
 import com.malomnogo.domain.PokemonListRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class PokemonListViewModel(
+class PokemonListViewModel @Inject constructor(
     repository: PokemonListRepository,
     private val itemMapper: PokemonItemMapper,
 ) : ViewModel() {

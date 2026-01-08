@@ -3,11 +3,12 @@ package com.malomnogo.lsit.presentation
 import com.malomnogo.GeneratePokemonImageUrl
 import com.malomnogo.GeneratePokemonNumber
 import com.malomnogo.domain.PokemonDomain
+import javax.inject.Inject
 
 interface PokemonItemMapper {
     fun map(input: PokemonDomain): PokemonUiItem
 
-    class Base(
+    class Base @Inject constructor(
         private val generateImage: GeneratePokemonImageUrl,
         private val generateNumber: GeneratePokemonNumber,
     ) : PokemonItemMapper {

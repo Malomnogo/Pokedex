@@ -2,8 +2,9 @@ package com.malomnogo.pokedex
 
 import android.app.Application
 import com.malomnogo.common.ProvideResources
+import javax.inject.Inject
 
-class BaseProvideResources(
+class BaseProvideResources @Inject constructor(
     private val context: Application,
 ) : ProvideResources {
     override fun noInternetConnectionMessage() = context.getString(R.string.no_internet_connection)

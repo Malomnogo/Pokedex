@@ -2,11 +2,12 @@ package com.malomnogo.data
 
 import com.malomnogo.model.PokemonCloud
 import com.malomnogo.network.PokemonService
+import javax.inject.Inject
 
 interface PokemonCloudDataSource {
     suspend fun fetchPokemonList(page: Int): List<PokemonCloud>
 
-    class Base(
+    class Base @Inject constructor(
         private val service: PokemonService,
     ) : PokemonCloudDataSource {
         companion object {

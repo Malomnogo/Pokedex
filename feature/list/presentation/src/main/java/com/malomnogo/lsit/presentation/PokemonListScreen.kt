@@ -14,21 +14,32 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import org.koin.androidx.compose.koinViewModel
+import com.malomnogo.list.api.ListFeatureDependencies
+import com.malomnogo.lsit.presentation.di.DaggerListComponent
 
 @Composable
 fun PokemonListScreen(
     onPokemonClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: PokemonListViewModel = koinViewModel(),
 ) {
+    val context = LocalContext.current
+    val dependencies = (context.applicationContext as ListFeatureDependencies)
+    
+    val component = remember(dependencies) {
+        DaggerListComponent.factory().create(dependencies)
+    }
+    
+    val viewModel: PokemonListViewModel = viewModel(factory = component.viewModelFactory())
     val pokemonList = viewModel.pokemonList.collectAsLazyPagingItems()
 
     PokemonListContent(

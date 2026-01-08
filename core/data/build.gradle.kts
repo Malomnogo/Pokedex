@@ -1,18 +1,14 @@
 plugins {
     id("pokedex.jvm.library")
     id("pokedex.ktlint")
-    id("pokedex.kotlin.serialization")
+    id("pokedex.android.dagger")
 }
 
 dependencies {
-    implementation(platform(libs.koin.bom))
-    implementation(libs.koin.core)
-
-    api(project(":core:network"))
-    implementation(project(":core:common"))
+    implementation(project(":core:network"))
     implementation(project(":core:model"))
-    implementation(libs.kotlinx.coroutines.core)
-    implementation(libs.retrofit.core)
-
-    testImplementation(libs.okhttp.logging)
+    implementation(project(":core:common")) // Added for HandleError/ProvideResources
+    
+    implementation(libs.kotlinx.serialization.json) // Added for Json
+    implementation(libs.retrofit.core) // Added for HttpException
 }

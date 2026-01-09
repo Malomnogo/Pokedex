@@ -29,11 +29,12 @@ class MainActivity : ComponentActivity() {
                         backStack = backstack,
                         entryProvider = { key ->
                             when (key) {
-                                is PokemonListNavKey -> pokemonListEntry(
-                                    key = key,
-                                    onPokemonClick = { pokemonId ->
-                                    }
-                                )
+                                is PokemonListNavKey ->
+                                    pokemonListEntry(
+                                        key = key,
+                                        onPokemonClick = { pokemonId ->
+                                        },
+                                    )
                                 else -> error("Unknown key: $key")
                             }
                         },
@@ -44,7 +45,7 @@ class MainActivity : ComponentActivity() {
                             } else {
                                 finish()
                             }
-                        }
+                        },
                     )
                 }
             }

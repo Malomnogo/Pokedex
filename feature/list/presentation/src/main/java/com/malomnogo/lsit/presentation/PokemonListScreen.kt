@@ -34,11 +34,12 @@ internal fun PokemonListScreen(
 ) {
     val context = LocalContext.current
     val dependencies = (context.applicationContext as ListFeatureDependencies)
-    
-    val component = remember(dependencies) {
-        DaggerListComponent.factory().create(dependencies)
-    }
-    
+
+    val component =
+        remember(dependencies) {
+            DaggerListComponent.factory().create(dependencies)
+        }
+
     val viewModel: PokemonListViewModel = viewModel(factory = component.viewModelFactory())
     val pokemonList = viewModel.pokemonList.collectAsLazyPagingItems()
 

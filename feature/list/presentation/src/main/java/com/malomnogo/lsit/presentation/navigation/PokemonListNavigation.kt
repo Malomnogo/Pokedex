@@ -9,12 +9,12 @@ import com.malomnogo.lsit.presentation.PokemonListScreen
 fun pokemonListEntry(
     key: PokemonListNavKey,
     onPokemonClick: (Int) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ): NavEntry<NavKey> {
     return NavEntry(key) {
         PokemonListScreen(
             onPokemonClick = onPokemonClick,
-            modifier = modifier
+            modifier = modifier,
         )
     }
 }

@@ -28,7 +28,7 @@ import com.malomnogo.list.api.ListFeatureDependencies
 import com.malomnogo.lsit.presentation.di.DaggerListComponent
 
 @Composable
-fun PokemonListScreen(
+internal fun PokemonListScreen(
     onPokemonClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -91,11 +91,8 @@ private fun PokemonListContent(
             ) {
                 items(
                     count = pokemonList.itemCount,
-                    // Для ключа используем peek, чтобы не триггерить загрузку лишний раз при расчете ключей
                     key = { index -> pokemonList.peek(index)?.id ?: index },
                 ) { index ->
-                    // ВАЖНО: Здесь используем [] (get), чтобы библиотека поняла, что элемент отображен
-                    // и нужно подгружать следующую страницу
                     val item = pokemonList[index]
 
                     if (item != null) {

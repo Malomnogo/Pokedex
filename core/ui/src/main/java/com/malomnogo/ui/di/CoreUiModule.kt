@@ -7,7 +7,6 @@ import dagger.Module
 
 @Module
 interface CoreUiModule {
-
     @Binds
     fun bindGeneratePokemonImageUrl(impl: GeneratePokemonImageUrl.DreamWorld): GeneratePokemonImageUrl
 

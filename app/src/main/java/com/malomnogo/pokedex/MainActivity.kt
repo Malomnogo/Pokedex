@@ -7,11 +7,13 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.rememberNavController
-import com.malomnogo.lsit.presentation.navigation.PokemonListRoute
-import com.malomnogo.lsit.presentation.navigation.pokemonListScreen
+import androidx.navigation3.runtime.NavKey
+import androidx.navigation3.ui.NavDisplay
+import com.malomnogo.list.api.PokemonListNavKey
+import com.malomnogo.lsit.presentation.navigation.pokemonListEntry
 import com.malomnogo.ui.theme.PokedexTheme
 
 class MainActivity : ComponentActivity() {
@@ -20,21 +22,30 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             PokedexTheme {
-                val navController = rememberNavController()
+                val backstack = remember { mutableStateListOf<NavKey>(PokemonListNavKey) }
 
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    NavHost(
-                        navController = navController,
-                        startDestination = PokemonListRoute,
+                    NavDisplay(
+                        backStack = backstack,
+                        entryProvider = { key ->
+                            when (key) {
+                                is PokemonListNavKey -> pokemonListEntry(
+                                    key = key,
+                                    onPokemonClick = { pokemonId ->
+                                    }
+                                )
+                                else -> error("Unknown key: $key")
+                            }
+                        },
                         modifier = Modifier.padding(innerPadding),
-                    ) {
-                        pokemonListScreen(
-                            onPokemonClick = { pokemonId ->
-                                // TODO: Navigate to details
-                                // navController.navigateToPokemonDetails(pokemonId)
-                            },
-                        )
-                    }
+                        onBack = {
+                            if (backstack.size > 1) {
+                                backstack.removeAt(backstack.size - 1)
+                            } else {
+                                finish()
+                            }
+                        }
+                    )
                 }
             }
         }

@@ -14,7 +14,6 @@ import javax.inject.Singleton
 
 @Module
 class NetworkModule {
-
     @Provides
     @Singleton
     fun provideJson(): Json {
@@ -45,7 +44,10 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideRetrofit(okHttpClient: OkHttpClient, json: Json): Retrofit {
+    fun provideRetrofit(
+        okHttpClient: OkHttpClient,
+        json: Json,
+    ): Retrofit {
         return Retrofit
             .Builder()
             .baseUrl("https://pokeapi.co/api/v2/")

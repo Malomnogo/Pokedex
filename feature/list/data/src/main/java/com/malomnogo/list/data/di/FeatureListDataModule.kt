@@ -10,7 +10,6 @@ import dagger.Provides
 
 @Module
 interface FeatureListDataModule {
-    
     @Binds
     fun bindPokemonListRepository(impl: BasePokemonListRepository): PokemonListRepository
 

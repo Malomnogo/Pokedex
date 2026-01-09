@@ -10,7 +10,6 @@ import javax.inject.Singleton
 
 @Module
 interface AppModule {
-    
     @Binds
     fun bindContext(application: Application): Context
 

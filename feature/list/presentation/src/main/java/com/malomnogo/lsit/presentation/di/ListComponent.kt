@@ -14,13 +14,12 @@ annotation class FeatureScope
 @Component(
     dependencies = [ListFeatureDependencies::class],
     modules = [
-        FeatureListPresentationModule::class, 
+        FeatureListPresentationModule::class,
         FeatureListDataModule::class,
-        CoreUiModule::class // Added CoreUiModule
-    ]
+        CoreUiModule::class,
+    ],
 )
 interface ListComponent {
-    
     fun viewModelFactory(): com.malomnogo.ui.di.DaggerViewModelFactory
 
     @Component.Factory

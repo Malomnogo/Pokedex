@@ -5,7 +5,6 @@ plugins {
     id("pokedex.android.dagger")
 }
 
-// Dagger migration
 dependencies {
     implementation(project(":feature:list:domain"))
     implementation(project(":core:data"))

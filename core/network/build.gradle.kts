@@ -6,9 +6,9 @@ plugins {
 }
 
 dependencies {
-    api(libs.retrofit.core) // Changed to api
-    api(libs.kotlinx.serialization.json) // Changed to api
-    api(libs.retrofit.kotlin.serialization) // Changed to api
-    api(libs.okhttp.logging) // Changed to api
+    api(libs.retrofit.core)
+    api(libs.kotlinx.serialization.json)
+    api(libs.retrofit.kotlin.serialization)
+    api(libs.okhttp.logging)
     implementation(project(":core:model"))
 }

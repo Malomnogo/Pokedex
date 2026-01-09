@@ -29,25 +29,24 @@ android {
 
 dependencies {
     implementation(project(":feature:list:api"))
+    implementation(project(":feature:list:presentation"))
+
     implementation(project(":core:ui"))
     implementation(project(":core:common"))
     implementation(project(":core:network"))
     implementation(project(":core:data"))
 
-    implementation(project(":feature:list:presentation"))
-    implementation(project(":feature:list:data"))
-    implementation(project(":feature:list:domain"))
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
 
-    // Compose dependencies
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
-    implementation(libs.androidx.compose.material3) // Added material3 for Scaffold
-    
-    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.activity.compose)
+
+    implementation(libs.androidx.navigation3.runtime)
+    implementation(libs.androidx.navigation3.ui)
     implementation(libs.kotlinx.serialization.json)
 
     implementation(libs.coil.compose)

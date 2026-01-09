@@ -3,7 +3,7 @@ plugins {
     id("pokedex.android.library.compose")
     id("pokedex.ktlint")
     id("pokedex.android.dagger")
-    id("pokedex.kotlin.serialization") // Added serialization plugin
+    id("pokedex.kotlin.serialization")
 }
 
 android {
@@ -23,11 +23,10 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
 
-    // Navigation dependency
-    implementation(libs.androidx.navigation.compose)
-    implementation(libs.kotlinx.serialization.json) // Added serialization dependency
+    implementation(libs.androidx.navigation3.runtime)
+    implementation(libs.androidx.navigation3.ui)
+    implementation(libs.kotlinx.serialization.json)
 
-    // Paging dependencies
     implementation(libs.androidx.paging.runtime)
     implementation(libs.androidx.paging.compose)
     implementation(libs.androidx.paging.common)

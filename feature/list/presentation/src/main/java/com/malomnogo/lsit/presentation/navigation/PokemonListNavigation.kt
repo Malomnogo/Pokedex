@@ -1,23 +1,20 @@
 package com.malomnogo.lsit.presentation.navigation
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import androidx.navigation.compose.composable
+import androidx.compose.ui.Modifier
+import androidx.navigation3.runtime.NavEntry
+import androidx.navigation3.runtime.NavKey
+import com.malomnogo.list.api.PokemonListNavKey
 import com.malomnogo.lsit.presentation.PokemonListScreen
-import kotlinx.serialization.Serializable
 
-@Serializable
-object PokemonListRoute
-
-fun NavController.navigateToPokemonList(navOptions: NavOptions? = null) {
-    navigate(route = PokemonListRoute, navOptions = navOptions)
-}
-
-fun NavGraphBuilder.pokemonListScreen(onPokemonClick: (Int) -> Unit) {
-    composable<PokemonListRoute> {
+fun pokemonListEntry(
+    key: PokemonListNavKey,
+    onPokemonClick: (Int) -> Unit,
+    modifier: Modifier = Modifier,
+): NavEntry<NavKey> {
+    return NavEntry(key) {
         PokemonListScreen(
             onPokemonClick = onPokemonClick,
+            modifier = modifier,
         )
     }
 }

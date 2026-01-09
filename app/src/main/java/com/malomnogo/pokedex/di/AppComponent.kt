@@ -17,13 +17,14 @@ import javax.inject.Singleton
         NetworkModule::class,
         DataModule::class,
         CommonModule::class,
-        CoreUiModule::class
-    ]
+        CoreUiModule::class,
+    ],
 )
 interface AppComponent : ListFeatureDependencies {
-    
     @Component.Factory
     interface Factory {
-        fun create(@BindsInstance application: Application): AppComponent
+        fun create(
+            @BindsInstance application: Application,
+        ): AppComponent
     }
 }

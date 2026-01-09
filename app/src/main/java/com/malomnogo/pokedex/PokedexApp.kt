@@ -15,7 +15,6 @@ class PokedexApp :
     Application(),
     ImageLoaderFactory,
     ListFeatureDependencies {
-
     lateinit var appComponent: AppComponent
 
     override fun onCreate() {
@@ -30,8 +29,9 @@ class PokedexApp :
                 add(SvgDecoder.Factory())
             }.build()
 
-    // Implementing ListFeatureDependencies by delegating to AppComponent
     override fun appDispatchers(): AppDispatchers = appComponent.appDispatchers()
+
     override fun handleError(): HandleError = appComponent.handleError()
+
     override fun pokemonCloudDataSource(): PokemonCloudDataSource = appComponent.pokemonCloudDataSource()
 }

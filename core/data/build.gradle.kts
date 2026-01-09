@@ -7,8 +7,8 @@ plugins {
 dependencies {
     implementation(project(":core:network"))
     implementation(project(":core:model"))
-    implementation(project(":core:common")) // Added for HandleError/ProvideResources
-    
-    implementation(libs.kotlinx.serialization.json) // Added for Json
-    implementation(libs.retrofit.core) // Added for HttpException
+    implementation(project(":core:common"))
+
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.retrofit.core)
 }

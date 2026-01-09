@@ -6,6 +6,8 @@ import com.malomnogo.data.PokemonCloudDataSource
 
 interface ListFeatureDependencies {
     fun appDispatchers(): AppDispatchers
+
     fun handleError(): HandleError
+
     fun pokemonCloudDataSource(): PokemonCloudDataSource
 }

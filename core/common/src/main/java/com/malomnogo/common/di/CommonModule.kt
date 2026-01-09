@@ -9,7 +9,6 @@ import javax.inject.Singleton
 
 @Module
 class CommonModule {
-    
     @Provides
     @Singleton
     fun provideAppDispatchers(): AppDispatchers {

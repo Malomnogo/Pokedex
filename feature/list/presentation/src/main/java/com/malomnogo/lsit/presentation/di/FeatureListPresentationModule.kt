@@ -12,7 +12,6 @@ import dagger.multibindings.IntoMap
 
 @Module
 interface FeatureListPresentationModule {
-
     @Binds
     fun bindPokemonItemMapper(impl: PokemonItemMapper.Base): PokemonItemMapper
 

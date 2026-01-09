@@ -9,7 +9,6 @@ import javax.inject.Singleton
 
 @Module
 interface DataModule {
-    
     @Binds
     @Singleton
     fun bindPokemonCloudDataSource(impl: PokemonCloudDataSource.Base): PokemonCloudDataSource
